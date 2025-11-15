@@ -20,14 +20,14 @@ public abstract class Soggetto {
         
         if (key == null || key.trim().isEmpty()) {   //trim = tolgo spazi all'inizio e fine
             
-            throw new IllegalArgumentException ("\nQuesto campo non puo essere vuoto, perfavore inserisca la chiave (puo contere solo numeri e lettere!)");
+            throw new IllegalArgumentException ("Questo campo non puo essere vuoto, perfavore inserisca la chiave (puo contere solo numeri e lettere!)");
         }
         
         String normalized = key.trim().toUpperCase();
         
         if (!normalized.matches("[A-Z0-9]+")) {  //matches = controlla che siano solo lettere e numeri, se no ! e lancia la eccezione
             
-            throw new IllegalArgumentException("\nLa chiave può contenere solo lettere e numeri, perfavore inserisca la chiave giusta!");
+            throw new IllegalArgumentException("La chiave può contenere solo lettere e numeri, perfavore inserisca la chiave giusta!");
         }
 
         this.key = normalized;
@@ -49,7 +49,7 @@ public abstract class Soggetto {
     
     public boolean matchesKey(String query) {
         
-    if (query == null) {    //se il campo è vuoto non posso ricercarlo
+    if (query == null || query.isBlank()) {    //se il campo è vuoto non posso ricercarlo
         
         return false;
     }
@@ -80,7 +80,7 @@ public abstract class Soggetto {
     @Override
     public int hashCode() {     //restituisce un numero intero basato sulla stringa
         
-        return Objects.hash(key);    //hash per confrontare più velocemente gli oggetti
+        return Objects.hash(getClass(), key);    //hash per confrontare più velocemente gli oggetti
     }
 
     @Override
