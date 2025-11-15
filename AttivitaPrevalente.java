@@ -32,8 +32,11 @@ public class Artista extends Personaggio {
         
         if (this.tipoAttivita == AttivitaPrevalente.ALTRO) {
             //se non è nell'enum salvo come testo
-            this.attivitaCustom = attivitaValidata;
-            this.descrizioneAttivita = attivitaValidata; 
+            
+            this.attivitaCustom = (tipoAttivita == AttivitaPrevalente.ALTRO) ? attivitaValidata : null;
+            
+            this.descrizioneAttivita = (attivitaCustom != null) ? attivitaCustom : tipoAttivita.getLabel();
+
         } 
             
         else {
