@@ -19,6 +19,9 @@ public enum Genere {
         
         this.descrizione = descrizione;
     }
+    public String getEtichetta() { 
+        return descrizione; 
+    }
 
     /** Restituisce la descrizione leggibile */
     
