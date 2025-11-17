@@ -22,7 +22,7 @@ public class Politico extends Personaggio {
         
         if (partito == null || partito.trim().isEmpty()) {
             
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("Il partito non può essere vuoto, per favore lo inserisca!");
         }
         return partito.trim();
     }
