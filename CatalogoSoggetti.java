@@ -16,7 +16,7 @@ public final class CatalogoSoggetti {
     }
 
     /** Mappa: chiave (maiuscola, trimmed) → Soggetto */  
-    private final Map<String, Soggetto> soggetti;
+    private final Map<String, Soggetto> soggetti = new ConcurrentHashMap<>(); 
 
     /** Costruttore privato = inizializza la mappa */
     
@@ -114,7 +114,7 @@ public final class CatalogoSoggetti {
             
             throw new IllegalArgumentException("Questo campo è obbligatorio, perfavore inserisca la chiave!");
         }
-        return chiave.trim().toUpperCase();
+        return key.trim().replaceAll("\\s+", "").toUpperCase();
     }
 
 }
