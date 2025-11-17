@@ -1,72 +1,72 @@
 # Photographic Archive Management System
 
-This is a Java-OOP based application for managing a photographic archive. The system allows for the cataloging of photographs, management of archives, and tracking of subjects depicted in the photos. This project was developed as an academic exercise in object-oriented programming.
+Questo è un progetto basato su Java-OOP per la gestione di un archivio fotografico. Il sistema consente la catalogazione delle fotografie, la gestione degli archivi e il tracciamento dei soggetti presenti nelle foto. Questo progetto è stato sviluppato come esercizio accademico di programmazione orientata agli oggetti.
 
-## Project Overview
+## Panoramica del Progetto
 
-The system is designed to fulfill the requirements of a photographic archive manager. It provides functionalities to organize photographs into distinct archives, manage the personnel responsible for them, and catalog a wide variety of subjects including people, places, art, and objects. The core architecture is built on OOP principles like inheritance, polymorphism, and encapsulation to create a modular and extensible system.
+Il sistema è progettato per soddisfare i requisiti di un gestore di archivi fotografici. Fornisce funzionalità per organizzare le fotografie in archivi distinti, gestire il personale responsabile e catalogare una vasta varietà di soggetti, tra cui persone, luoghi, opere d'arte e oggetti. L'architettura principale è costruita su principi di OOP come ereditarietà, polimorfismo ed encapsulamento per creare un sistema modulare ed estensibile.
 
-## Features
+## Funzionalità
 
-The project is divided into two main modules, developed by two different contributors.
+Il progetto è suddiviso in due moduli principali, sviluppati da due contributori differenti.
 
-### Core Archive Management (Student A)
+### Core Archive Management (Studente A)
 
-*   **Archive Management**: Create and manage multiple archives using the `Archivio` class.
-*   **Photograph Handling**: Add, remove, and search for photographs (`Fotografia` and `FotoAColore`) within an archive.
-*   **Data Persistence**: A singleton `GestoreArchivi` class handles saving all data to the disk and loading it back into the application, ensuring data is not lost between sessions.
-*   **Personnel Management**: Assign a `Responsabile` to each archive to track ownership and contact details.
-*   **Main Application Flow**: The main entry point (`ProgettoArchivio`) provides a text-based user interface to interact with the system's features.
+* **Gestione Archivi**: Creazione e gestione di più archivi tramite la classe `Archivio`.
+* **Gestione Fotografie**: Aggiunta, rimozione e ricerca di fotografie (`Fotografia` e `FotoAColore`) all'interno di un archivio.
+* **Persistenza dei Dati**: Una classe singleton `GestoreArchivi` gestisce il salvataggio di tutti i dati su disco e il caricamento nell'applicazione, assicurando che non vadano persi tra una sessione e l'altra.
+* **Gestione del Personale**: Assegnazione di un `Responsabile` a ciascun archivio per monitorarne la proprietà e i contatti.
+* **Flusso Principale dell’Applicazione**: Il punto di ingresso (`ProgettoArchivio`) fornisce un'interfaccia testuale per interagire con le funzionalità del sistema.
 
-### Subject Cataloging (Student B)
+### Subject Cataloging (Studente B)
 
-*   **Detailed Subject Modeling**: A flexible and abstract data model for different types of subjects (`Soggetto`).
-*   **Rich Subject Hierarchy**:
-    *   `Personaggio`: A generic person, which can be specialized into:
-        *   `Politico`: A politician with party and role information.
-        *   `Artista`: An artist with a specific primary activity.
-    *   `OperaArte`: Represents a work of art, linked to an artist and a location.
-    *   `Luogo`: Represents a geographical place.
-    *   `Oggetto`: Represents a generic inanimate object.
-*   **Centralized Catalog**: The `CatalogoSoggetti` class provides a central repository for all subjects, using a unique key for efficient lookup and management.
+* **Modellazione Dettagliata dei Soggetti**: Un modello dati flessibile e astratto per diversi tipi di soggetti (`Soggetto`).
+* **Ricca Gerarchia dei Soggetti**:
+    * `Personaggio`: Una persona generica, che può essere specializzata in:
+        * `Politico`: Un politico con informazioni su partito e ruolo.
+        * `Artista`: Un artista con una specifica attività primaria.
+    * `OperaArte`: Rappresenta un'opera d'arte, collegata a un artista e a una località.
+    * `Luogo`: Rappresenta un luogo geografico.
+    * `Oggetto`: Rappresenta un oggetto inanimato generico.
+* **Catalogo Centralizzato**: La classe `CatalogoSoggetti` fornisce un archivio centrale per tutti i soggetti, utilizzando una chiave univoca per una gestione efficiente.
 
-## How to Compile and Run
+## Come Compilare ed Eseguire
 
-To compile and run the project, you need to have a Java Development Kit (JDK) installed.
+Per compilare ed eseguire il progetto, è necessario avere installato un Java Development Kit (JDK).
 
-1.  Open a terminal or command prompt in the root directory of the project.
+1. Apri un terminale o prompt dei comandi nella directory principale del progetto.
 
-2.  Compile all the Java source files using the following command:
+2. Compila tutti i file sorgente Java utilizzando il seguente comando:
     ```sh
     javac -d . src/gestione/*.java src/progettoarchivio/*.java
     ```
-    This command compiles all `.java` files from the `src` directory and places the compiled `.class` files in the root project folder, respecting their package structure.
+    Questo comando compila tutti i file `.java` nella directory `src` e colloca i file `.class` compilati nella cartella principale del progetto, rispettando la struttura dei package.
 
-3.  Run the application with this command:
+3. Esegui l’applicazione con questo comando:
     ```sh
     java progettoarchivio.ProgettoArchivio
     ```
-    This will start the application and display the main menu in the console.
+    Questo avvierà l’applicazione e mostrerà il menu principale nella console.
 
-## Project Structure
+## Struttura del Progetto
 
-The source code is organized into two main packages inside the `src` directory:
+Il codice sorgente è organizzato in due package principali all'interno della directory `src`:
 
-*   `src/gestione/`: Contains all the classes related to the management of archives, photographs, and responsible personnel (Student A's work).
-*   `src/progettoarchivio/`: Contains the data model for subjects and the cataloging system (mostly Student B's work), as well as the main application class `ProgettoArchivio.java` (Student A's work).
+* `src/gestione/`: Contiene tutte le classi relative alla gestione degli archivi, fotografie e personale responsabile (lavoro dello Studente A).
+* `src/progettoarchivio/`: Contiene il modello dati dei soggetti e il sistema di catalogazione (principalmente lavoro dello Studente B), oltre alla classe principale `ProgettoArchivio.java` (Studente A).
 
-*Note: There are duplicate `.java` files in the root directory. These appear to be older or un-packaged versions of the classes inside `src/`. For compilation and execution, only the files within the `src/` directory are used.*
+*Nota: Ci sono file `.java` duplicati nella directory principale. Sembrano versioni più vecchie o non strutturate delle classi presenti in `src/`. Per compilare ed eseguire, vengono usati solo i file nella cartella `src/`.*
 
-## Future Development
+## Sviluppi Futuri
 
-The following are potential future enhancements for the project:
+Di seguito sono riportati potenziali miglioramenti futuri del progetto:
 
-*   **Graphical User Interface (GUI)**: Replace the current text-based interface with a modern GUI using a framework like JavaFX, including features like drag-and-drop for photos and image previews.
-*   **Client-Server Architecture**: Evolve the system into a multi-user application with a central server managing the data and multiple clients connecting to it.
-*   **Cloud Integration**: Add functionality to back up or sync archives with cloud storage services like Google Drive or AWS S3.
-*   **Advanced Search**: Implement more complex search and filtering capabilities (e.g., search by date range, subject attributes, etc.).
+* **Interfaccia Grafica (GUI)**: Sostituire l'attuale interfaccia testuale con una moderna GUI usando JavaFX, includendo funzionalità come drag-and-drop e anteprime delle immagini.
+* **Architettura Client-Server**: Evolvere il sistema in un'applicazione multiutente con un server centrale che gestisce i dati e più client che vi si connettono.
+* **Integrazione Cloud**: Aggiungere funzionalità per il backup o la sincronizzazione degli archivi con servizi cloud come Google Drive o AWS S3.
+* **Ricerca Avanzata**: Implementare funzionalità di ricerca avanzata (es. ricerca per intervallo di date, attributi dei soggetti, ecc.).
 
-## Contributors
+## Contributori
 
-*   **Student A**: Responsible for the archive management system, data persistence, and the main application logic.
-*   **Student B**: Responsible for the detailed subject data model and the cataloging system.
+* **Studente A**: Responsabile del sistema di gestione archivi, persistenza dei dati e logica principale dell'applicazione.
+* **Studente B**: Responsabile del modello dati dei soggetti e del sistema di catalogazione.
