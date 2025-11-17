@@ -1,43 +1,52 @@
-//Classe astratta per rappresentare un soggetto fotografato.
-//Ogni soggetto ha una chiave univoca per il catalogo
+/**
+    *Classe astratta per rappresentare un soggetto fotografato.
+    *Ogni soggetto ha una chiave univoca per il catalogo
+    * La chiave è immutabile, normalizzata in maiuscolo e validata al momento della costruzione.
+*/
 
 package progettoarchivio;
 
 import java.util.Objects;
 
-
 public abstract class Soggetto {
     
-    private final String key; //final = immodificabile
+    private final String key;     //final = immodificabile
     
 /**
      * Costruisce un Soggetto con chiave valida.
-     * @param key chiave del soggetto (non null, non vuota, solo A-Z e 0-9)
+     * @param key chiave del soggetto (obbligatoria e solo A-Z e 0-9)
      * @throws IllegalArgumentException se la chiave è invalida
 */
 
     public Soggetto(String key) {
         
-        if (key == null || key.trim().isEmpty()) {   //trim = tolgo spazi all'inizio e fine
+        if (key == null || key.trim().isEmpty()) {   //trim = toglie spazi all'inizio e fine
             
-            throw new IllegalArgumentException ("Questo campo non puo essere vuoto, perfavore inserisca la chiave (puo contere solo numeri e lettere!)");
+            throw new IllegalArgumentException ("La chiave non può essere vuota, per favore inserisca la chiave giusta (può contenere solo numeri e lettere!)");
         }
         
-        String normalized = key.trim().toUpperCase();
+        String normalized = key.trim().toUpperCase(Locale.ROOT);
         
         if (!normalized.matches("[A-Z0-9]+")) {  //matches = controlla che siano solo lettere e numeri, se no ! e lancia la eccezione
             
-            throw new IllegalArgumentException("La chiave può contenere solo lettere e numeri, perfavore inserisca la chiave giusta!");
+            throw new IllegalArgumentException("La chiave può contenere solo caratteri alfanumerici, per favore inserisca la chiave giusta!");
         }
 
-        this.key = normalized;
+        if (normalized.length() > 30) {
+            throw new IllegalArgumentException("La chiave è troppo lunga, per favore inserisca una chiave che ha meno di 30 caratteri!");
+}
+
     }
 
     public String getKey() {
         return key;
     }
     
-/** Restituisce una descrizione testuale del soggetto */
+/** 
+*Restituisce una descrizione testuale del soggetto 
+* @return descrizione leggibile del soggetto (es. nome, luogo, evento)
+*/
+    
     public abstract String getDescription();
     
     /**
@@ -49,12 +58,11 @@ public abstract class Soggetto {
     
     public boolean matchesKey(String query) {
         
-    if (query == null || query.isBlank()) {    //se il campo è vuoto non posso ricercarlo
-        
+    if (query == null || query.trim().isEmpty()) {    //se il campo è vuoto non posso ricercarlo
         return false;
     }
 
-    //true se parte è dentro key, false altrimenti es: chiave=ABC123, query=123 → true
+    //true se parte è dentro key, false altrimenti es: chiave=ABC123, query=123 → true    
     return key.contains(query.trim().toUpperCase());
 }
 
@@ -69,8 +77,8 @@ public abstract class Soggetto {
         }
 
         //Controlla se un oggetto appartiene a una certa classe
-        if (!(o instanceof Soggetto s)) { 
-            
+        
+        if (!(o instanceof Soggetto s)) {  
             return false;
         }
         
@@ -94,5 +102,4 @@ public abstract class Soggetto {
 }
 /**
  * getClass() prende la classe reale, getSimpleName() solo il nome per avere solo il nome della classe, senza il pacchetto
-
  */
