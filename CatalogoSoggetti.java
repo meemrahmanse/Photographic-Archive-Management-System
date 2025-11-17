@@ -1,7 +1,7 @@
 package progettoarchivio;
 
 import java.util.*;
-
+import java.util.stream.Collectors;
 /**
  * Catalogo centrale dei soggetti fotografati.
  * Implementa il pattern Singleton = modello generativo che garantisce l'esistenza di un solo oggetto di una classe e consente di accedere all'oggetto da qualsiasi luogo
@@ -9,16 +9,13 @@ import java.util.*;
  */
 
 public final class CatalogoSoggetti {
-
-    /** Unica istanza del catalogo */
-    
+    /** Unica istanza del catalogo */    
     private static final class Holder {
         
         static final CatalogoSoggetti ISTANZA = new CatalogoSoggetti();
     }
 
-    /** Mappa: chiave (maiuscola, trimmed) → Soggetto */
-    
+    /** Mappa: chiave (maiuscola, trimmed) → Soggetto */  
     private final Map<String, Soggetto> soggetti;
 
     /** Costruttore privato = inizializza la mappa */
@@ -30,8 +27,7 @@ public final class CatalogoSoggetti {
 
     /** Restituisce l'unica istanza del catalogo */
     
-    public static CatalogoSoggetti getInstance() {
-        
+    public static CatalogoSoggetti getInstance() {      
         return Holder.ISTANZA;        //contenitore generico o classe wrapper in grado di memorizzare e gestire un oggetto di qualsiasi tipo
     }
 
