@@ -25,7 +25,7 @@ public abstract class Soggetto {
             throw new IllegalArgumentException ("La chiave non può essere vuota, per favore inserisca la chiave giusta (può contenere solo numeri e lettere!)");
         }
         
-        String normalized = key.trim().toUpperCase(Locale.ROOT);
+        this.key = key.trim().toUpperCase(Locale.ROOT);
         
         if (!normalized.matches("[A-Z0-9]+")) {  //matches = controlla che siano solo lettere e numeri, se no ! e lancia la eccezione
             
