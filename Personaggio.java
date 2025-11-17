@@ -30,7 +30,7 @@ public class Personaggio extends Soggetto {
         super(key);
         
         this.nome = validaNome(nome);   
-        this.sesso = Genere.daChar(sesso);
+        this.sesso = sesso;
         this.nascita = validaNascita(nascita);
         this.morte = morte;      
 
