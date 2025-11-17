@@ -1,84 +1,26 @@
 package progettoarchivio;
 
-/**
- * Rappresenta un artista con attività prevalente.
- * Se l'attività non è nell'enum, usa testo personalizzato.
- */
+public enum AttivitaPrevalente {
+    PITTURA("Pittura"),
+    SCULTURA("Scultura"),
+    MUSICA("Musica"),
+    ALTRO("Altro");
 
-public class Artista extends Personaggio {
-    
-    private final AttivitaPrevalente tipoAttivita;
-    private final String attivitaCustom;
-    private final String descrizioneAttivita;
-    
-    /**
-     * Costruisce un Artista.
-     * @param key chiave univoca (validata in Soggetto)
-     * @param nome = nome
-     * @param sesso = 'M', 'F', 'A'
-     * @param morte true se deceduto
-     * @param nascita anno di nascita
-     * @param attivita = attività prevalente (obbligatoria, trimmed)
-     */
+    private final String label;
 
-    public Artista(String key, String nome, char sesso, boolean morte, int nascita, String attivita) {
-        
-        super(key, nome, sesso, morte, nascita);
-        
-        String attivitaValidata = validateActivity(attivita);
-        
-        //daStringa = converte la stringa in enum; vedo se sta nell'enum
-        this.tipoAttivita = AttivitaPrevalente.daStringa(attivitaValidata);
-        
-        if (this.tipoAttivita == AttivitaPrevalente.ALTRO) {
-            //se non è nell'enum salvo come testo
-            
-            this.descrizioneAttivita = (attivitaCustom != null) ? attivitaCustom : tipoAttivita.getLabel();
+    AttivitaPrevalente(String label) {
+        this.label = label;
+    }
 
-        } 
-            
-        else {
-            
-            this.attivitaCustom = null;
-            this.descrizioneAttivita = this.tipoAttivita.getLabel(); // Usa descrizione enum
+    public String getLabel() {
+        return label;
+    }
+
+    public static AttivitaPrevalente daStringa(String s) {
+        if (s == null) return ALTRO;
+        for (AttivitaPrevalente a : values()) {
+            if (a.label.equalsIgnoreCase(s.trim())) return a;
         }
-    }
-
-    private String validateActivity(String activity) {
-        
-        if (activity == null || activity.trim().isEmpty()) {
-            
-            throw new IllegalArgumentException("Questo campo non puo essere vuoto, perfavore inserisca l'attività prevalente!");
-        }
-        return activity.trim();
-    }
-
-    public String getDescrizioneAttivita() { 
-        
-        return descrizioneAttivita; 
-    }
-    
-    public AttivitaPrevalente getTipoAttivita() {
-        return tipoAttivita;
-    }
-
-    public String getAttivitaCustom() {
-        return attivitaCustom;
-    }
-
-    @Override
-    public String getDescription() {
-        
-        return super.getDescription() + " - Artista: " + descrizioneAttivita;
-    }
-
-    
-    @Override
-    
-    public String toString() {
-        
-    return String.format("%s - %s", super.toString(), getDescription());
-    
+        return ALTRO;
     }
 }
-
