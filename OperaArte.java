@@ -60,8 +60,8 @@ public class OperaArte extends Soggetto {
     }
 
     private int validaAnno(int anno) {
-        
-        if (anno < 0 || anno > 2026){
+        int annoCorrente = Year.now().getValue();
+        if (anno < 0 || anno > annoCorrente){
             
             throw new IllegalArgumentException(
                     
