@@ -9,8 +9,8 @@ import java.util.Objects;
 public class Artista extends Personaggio {
 
     private final AttivitaPrevalente tipoAttivita;
-    private final String attivitaCustom;        
-    private final String descrizioneAttivita;  
+    private final String attivitaCustom;        //null se non è altro
+    private final String descrizioneAttivita;  //label standard/testo personalizzato
 
     /**
      * Costruisce Personaggio
@@ -23,7 +23,7 @@ public class Artista extends Personaggio {
      * @throws IllegalArgumentException se l'attività vuota
      */
     public Artista(String key, String nome, char sesso, boolean morte, int nascita, String attivita) {
-        super(key, nome, sesso, morte, nascita);
+        super(key, nome, Genere.daChar(sesso), morte, nascita);
 
         String attivitaTrimmed = validaAttivita(attivita);
 
@@ -45,37 +45,61 @@ public class Artista extends Personaggio {
         }
     }
 
-    // Costruttore alternativo: accetta direttamente l'enum 
+   // Costruisce un Artista con attività prevalente scelta direttamente dall'enum.
+    
     public Artista(String key, String nome, char sesso, boolean morte, int nascita, AttivitaPrevalente tipo) {
         
-        super(key, nome, sesso, morte, nascita);
+        super(key, nome, Genere.daChar(sesso), morte, nascita);
         
         if (tipo == AttivitaPrevalente.ALTRO) {
             
-            throw new IllegalArgumentException("Usa il costruttore con String per attività personalizzata");
+            throw new IllegalArgumentException("Per attività personalizzata usa il costruttore con parametro String!");
         }
+        
         this.tipoAttivita = tipo;
         this.attivitaCustom = null;
         this.descrizioneAttivita = tipo.getLabel();
     }
 
+/**
+     * Valida e normalizza l'attività testuale.
+     *
+     * @param attivita attività inserita dall'utente
+     * @return versione trimmata
+     * @throws IllegalArgumentException se nulla o vuota dopo trim
+*/
+    
     private static String validaAttivita(String attivita) {
         
-        if (attivita == null || attivita.trim().isEmpty()) {
+        if (attivita == null) {
             
-            throw new IllegalArgumentException("Per favore inserisca l'attivita prevalente!");
+            throw new IllegalArgumentException("L'inserimento dell'attività prevalente è obbligatoria!");
         }
-        return attivita.trim();
+        String trimmed = attivita.trim();
+        
+        if (trimmed.isEmpty()) {
+            
+            throw new IllegalArgumentException("L'attività prevalente non può essere vuota!");
+        }
+        return trimmed;
     }
 
     public AttivitaPrevalente getTipoAttivita() {
         return tipoAttivita;
     }
-
+/**
+     * Restituisce l'attività personalizzata, se presente.
+     * @return testo personalizzato o stringa vuota se non presente
+*/
+    
     public String getAttivitaCustom() {
-        return attivitaCustom;
+        return attivitaCustom != null ? attivitaCustom : "";
     }
 
+/**
+     * Restituisce la descrizione completa dell'attività (label enum o testo custom).
+     * @return descrizione leggibile
+*/
     public String getDescrizioneAttivita() {
         return descrizioneAttivita;
     }
@@ -87,6 +111,6 @@ public class Artista extends Personaggio {
 
     @Override
     public String toString() {
-        return super.toString() + " - " + getDescription();
+        return super.toString() + " - Artista: " + descrizioneAttivita;
     }
 }
