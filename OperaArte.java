@@ -1,5 +1,7 @@
 package progettoarchivio;
 
+import java.time.Year;
+
 /**
  * Rappresenta un'opera d'arte fotografata.
  * Estende Soggetto con chiave univoca.
