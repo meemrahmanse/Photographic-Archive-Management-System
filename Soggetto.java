@@ -3,13 +3,14 @@
     *Ogni soggetto ha una chiave univoca per il catalogo
     * La chiave è immutabile, normalizzata in maiuscolo e validata al momento della costruzione.
 */
-
 package progettoarchivio;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public abstract class Soggetto {
     
+    private static final int MAX_KEY_LENGTH = 30;
     private final String key;     //final = immodificabile
     
 /**
@@ -22,22 +23,26 @@ public abstract class Soggetto {
         
         if (key == null || key.trim().isEmpty()) {   //trim = toglie spazi all'inizio e fine
             
-            throw new IllegalArgumentException ("La chiave non può essere vuota, per favore inserisca la chiave giusta (può contenere solo numeri e lettere!)");
+            throw new IllegalArgumentException ("Chiave non valida, non può essere vuota!");
         }
         
-        this.key = key.trim().toUpperCase(Locale.ROOT);
+        String normalized = key.trim().toUpperCase(Locale.ROOT);
         
         if (!normalized.matches("[A-Z0-9]+")) {  //matches = controlla che siano solo lettere e numeri, se no ! e lancia la eccezione
             
-            throw new IllegalArgumentException("La chiave può contenere solo caratteri alfanumerici, per favore inserisca la chiave giusta!");
+            throw new IllegalArgumentException("Chiave non valida, può contenere solo caratteri alfanumerici!");
         }
 
-        if (normalized.length() > 30) {
-            throw new IllegalArgumentException("La chiave è troppo lunga, per favore inserisca una chiave che ha meno di 30 caratteri!");
-}
-
+        if (normalized.length() > MAX_KEY_LENGTH) {
+            
+            throw new IllegalArgumentException("Chiave non valida, deve avere al massimo " + MAX_KEY_LENGTH + " caratteri!");
+        }
+        
+        this.key = normalized;
     }
 
+
+    
     public String getKey() {
         return key;
     }
@@ -58,13 +63,15 @@ public abstract class Soggetto {
     
     public boolean matchesKey(String query) {
         
-    if (query == null || query.trim().isEmpty()) {    //se il campo è vuoto non posso ricercarlo
+    if (query == null || query.trim().isBlank()) {    //se il campo è vuoto non posso ricercarlo
         return false;
     }
 
     //true se parte è dentro key, false altrimenti es: chiave=ABC123, query=123 → true    
-    return key.contains(query.trim().toUpperCase());
-}
+    String normalizedQuery = query.trim().toUpperCase(Locale.ROOT);
+    return key.contains(normalizedQuery);
+  }
+
 
     @Override
 
@@ -79,6 +86,7 @@ public abstract class Soggetto {
         //Controlla se un oggetto appartiene a una certa classe
         
         if (!(o instanceof Soggetto s)) {  
+            
             return false;
         }
         
