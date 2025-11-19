@@ -1,7 +1,11 @@
 package progettoarchivio;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.NoSuchElementException;
+
 /**
  * Catalogo centrale dei soggetti fotografati.
  * Implementa il pattern Singleton = modello generativo che garantisce l'esistenza di un solo oggetto di una classe e consente di accedere all'oggetto da qualsiasi luogo
@@ -18,16 +22,12 @@ public final class CatalogoSoggetti {
     /** Mappa: chiave (maiuscola, trimmed) → Soggetto */  
     private final Map<String, Soggetto> soggetti = new ConcurrentHashMap<>(); 
 
-    /** Costruttore privato = inizializza la mappa */
     
-    private CatalogoSoggetti() {
-        
-        this.soggetti = new HashMap<>();
-    }
 
     /** Restituisce l'unica istanza del catalogo */
     
-    public static CatalogoSoggetti getInstance() {      
+    public static CatalogoSoggetti getInstance() {
+        
         return Holder.ISTANZA;        //contenitore generico o classe wrapper in grado di memorizzare e gestire un oggetto di qualsiasi tipo
     }
 
@@ -114,7 +114,7 @@ public final class CatalogoSoggetti {
             
             throw new IllegalArgumentException("Questo campo è obbligatorio, perfavore inserisca la chiave!");
         }
-        return key.trim().replaceAll("\\s+", "").toUpperCase();
+        return chiave.trim().replaceAll("\\s+", "").toUpperCase();
     }
 
 }
