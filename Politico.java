@@ -11,7 +11,7 @@ public class Politico extends Personaggio {
 
     public Politico(String key, String nome, char sesso, boolean morte, int nascita, String partito, String carica) {
         
-        super(key, nome, sesso, morte, nascita);
+        super(key, nome, Genere.daChar(sesso), morte, nascita);
         
         this.partito = validaPartito(partito);
         
