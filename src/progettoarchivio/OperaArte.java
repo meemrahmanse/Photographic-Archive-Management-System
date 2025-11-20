@@ -1,5 +1,7 @@
 package progettoarchivio;
 
+import java.time.Year;
+
 /**
  * Rappresenta un'opera d'arte fotografata.
  * Estende Soggetto con chiave univoca.
@@ -32,7 +34,7 @@ public class OperaArte extends Soggetto {
         this.anno = validaAnno(anno);
     }
 
-    public OperaArte(){}
+    public OperaArte (){}
 
     private String validaNomeOpera(String nome) {
         
@@ -62,8 +64,8 @@ public class OperaArte extends Soggetto {
     }
 
     private int validaAnno(int anno) {
-        
-        if (anno < 0 || anno > 2026){
+        int annoCorrente = Year.now().getValue();
+        if (anno < 0 || anno > annoCorrente){
             
             throw new IllegalArgumentException(
                     
@@ -108,4 +110,3 @@ public class OperaArte extends Soggetto {
     }
 
 }
-
