@@ -2,12 +2,11 @@
 
 package gestione;
 
-import java.io.Serializable;
 import progettoarchivio.Soggetto;
 
 
 // represent photograph with its basic attributes
-public class Fotografia implements Serializable {
+public class Fotografia {
 
     private String idFoto;
     private String dimensione;
@@ -23,7 +22,7 @@ public class Fotografia implements Serializable {
         this.soggetto = soggetto;
     }
 
-
+    public Fotografia() {}
 
     public String getIdFoto() {
         return idFoto;
@@ -68,8 +67,9 @@ public class Fotografia implements Serializable {
     // string representation of the photograph
     @Override
     public String toString() {
-        return "ID: " + idFoto + ", Dimensione: " + dimensione + ", Stato: " + statoConservazione + ", Soggetto: " + soggetto.toString();
+        return "ID: " + idFoto + ", Dimensione: " + dimensione + ", Stato: " + statoConservazione + ", Soggetto: " + soggetto;
     }
 }
+
 
 // this class represents a photograph with its basic attributes.
