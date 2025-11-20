@@ -32,6 +32,8 @@ public class OperaArte extends Soggetto {
         this.anno = validaAnno(anno);
     }
 
+    public OperaArte(){}
+
     private String validaNomeOpera(String nome) {
         
         if (nome == null || nome.trim().isEmpty()){
@@ -106,3 +108,4 @@ public class OperaArte extends Soggetto {
     }
 
 }
+
