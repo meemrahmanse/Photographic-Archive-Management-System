@@ -1,45 +1,57 @@
-//Classe astratta per rappresentare un soggetto fotografato.
-//Ogni soggetto ha una chiave univoca per il catalogo
-
+/**
+    *Classe astratta per rappresentare un soggetto fotografato.
+    *Ogni soggetto ha una chiave univoca per il catalogo
+    * La chiave è immutabile, normalizzata in maiuscolo e validata al momento della costruzione.
+*/
 package progettoarchivio;
 
+import java.util.Locale;
 import java.util.Objects;
-
 
 public abstract class Soggetto {
     
-    private String key; 
+    private static final int MAX_KEY_LENGTH = 30;
+    private final String key;     //final = immodificabile
     
 /**
      * Costruisce un Soggetto con chiave valida.
-     * @param key chiave del soggetto (non null, non vuota, solo A-Z e 0-9)
+     * @param key chiave del soggetto (obbligatoria e solo A-Z e 0-9)
      * @throws IllegalArgumentException se la chiave è invalida
 */
 
     public Soggetto(String key) {
         
-        if (key == null || key.trim().isEmpty()) {   //trim = tolgo spazi all'inizio e fine
+        if (key == null || key.trim().isEmpty()) {   //trim = toglie spazi all'inizio e fine
             
-            throw new IllegalArgumentException ("\nQuesto campo non puo essere vuoto, perfavore inserisca la chiave (puo contere solo numeri e lettere!)");
+            throw new IllegalArgumentException ("Chiave non valida, non può essere vuota!");
         }
         
-        String normalized = key.trim().toUpperCase();
+        String normalized = key.trim().toUpperCase(Locale.ROOT);
         
         if (!normalized.matches("[A-Z0-9]+")) {  //matches = controlla che siano solo lettere e numeri, se no ! e lancia la eccezione
             
-            throw new IllegalArgumentException("\nLa chiave può contenere solo lettere e numeri, perfavore inserisca la chiave giusta!");
+            throw new IllegalArgumentException("Chiave non valida, può contenere solo caratteri alfanumerici!");
         }
 
+        if (normalized.length() > MAX_KEY_LENGTH) {
+            
+            throw new IllegalArgumentException("Chiave non valida, deve avere al massimo " + MAX_KEY_LENGTH + " caratteri!");
+        }
+        
         this.key = normalized;
     }
 
+public Soggetto (){}
+    
     public String getKey() {
         return key;
     }
-
-    protected Soggetto() {}
-
-/** Restituisce una descrizione testuale del soggetto */
+    
+/** 
+*Restituisce una descrizione testuale del soggetto 
+* @return descrizione leggibile del soggetto (es. nome, luogo, evento)
+*/
+    
     public abstract String getDescription();
     
     /**
@@ -51,14 +63,15 @@ public abstract class Soggetto {
     
     public boolean matchesKey(String query) {
         
-    if (query == null) {    //se il campo è vuoto non posso ricercarlo
-        
+    if (query == null || query.trim().isBlank()) {    //se il campo è vuoto non posso ricercarlo
         return false;
     }
 
-    //true se parte è dentro key, false altrimenti es: chiave=ABC123, query=123 → true
-    return key.contains(query.trim().toUpperCase());
-}
+    //true se parte è dentro key, false altrimenti es: chiave=ABC123, query=123 → true    
+    String normalizedQuery = query.trim().toUpperCase(Locale.ROOT);
+    return key.contains(normalizedQuery);
+  }
+
 
     @Override
 
@@ -71,7 +84,8 @@ public abstract class Soggetto {
         }
 
         //Controlla se un oggetto appartiene a una certa classe
-        if (!(o instanceof Soggetto s)) { 
+        
+        if (!(o instanceof Soggetto s)) {  
             
             return false;
         }
@@ -82,7 +96,7 @@ public abstract class Soggetto {
     @Override
     public int hashCode() {     //restituisce un numero intero basato sulla stringa
         
-        return Objects.hash(key);    //hash per confrontare più velocemente gli oggetti
+        return Objects.hash(getClass(), key);    //hash per confrontare più velocemente gli oggetti
     }
 
     @Override
@@ -94,9 +108,6 @@ public abstract class Soggetto {
         return String.format("%s[chiave=%s]", getClass().getSimpleName(), key);
     }
 }
-/**
+/** 
  * getClass() prende la classe reale, getSimpleName() solo il nome per avere solo il nome della classe, senza il pacchetto
-
  */
-
-
