@@ -40,7 +40,7 @@ public final class CatalogoSoggetti {
      * @param s = soggetto da aggiungere 
      * @throws IllegalArgumentException se s è null o chiave già esistente
      */
-    
+    public CatalogoSoggetti(){}
     public void aggiungiSoggetto(Soggetto s) {
         
         if (s == null) {
@@ -122,3 +122,4 @@ public final class CatalogoSoggetti {
     }
 
 }
+
