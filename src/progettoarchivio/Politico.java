@@ -18,6 +18,8 @@ public class Politico extends Personaggio {
         this.carica = carica != null ? carica.trim() : "";  //Se carica non è nulla, la pulisco con trim(), altrimenti metto stringa vuota. Così evito errori e gestisco il campo opzionale
     }
 
+   public Politico(){}
+
     private String validaPartito(String partito) {
         
         if (partito == null || partito.trim().isEmpty()) {
@@ -46,3 +48,4 @@ public class Politico extends Personaggio {
     }
 
 }
+
