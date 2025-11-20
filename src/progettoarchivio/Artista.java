@@ -43,6 +43,8 @@ public class Artista extends Personaggio {
         }
     }
 
+    public Artista (){}
+
     private String validateActivity(String activity) {
         
         if (activity == null || activity.trim().isEmpty()) {
@@ -80,5 +82,6 @@ public class Artista extends Personaggio {
     
     }
 }
+
 
 
