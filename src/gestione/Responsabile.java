@@ -2,11 +2,9 @@
 
 package gestione;
 
-import java.io.Serializable;
-
 
 // this class represents a responsible person managing an archive with their context details.
-public class Responsabile implements Serializable {
+public class Responsabile {
 
     private String nome;
     private String indirizzo;
@@ -22,7 +20,7 @@ public class Responsabile implements Serializable {
         this.orarioApertura = orarioApertura;
     }
 
-
+     public Responsabile() {}
 
     // Getters and Setters
     public String getNome() {
@@ -70,6 +68,7 @@ public class Responsabile implements Serializable {
         return "Responsabile: " + nome + ", Indirizzo: " + indirizzo + ", Tel: " + telefono + ", Orari: " + orarioApertura;
     }
 }
+
 
 
 // this class represents a responsible person managing an archive, with their contact details.
