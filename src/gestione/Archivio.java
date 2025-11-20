@@ -2,13 +2,11 @@
 
 package gestione;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-// 
-public class Archivio implements Serializable {
+public class Archivio {
 
     private String nomeArchivio;
     private Responsabile responsabile;
@@ -16,13 +14,14 @@ public class Archivio implements Serializable {
 
     public Archivio(String nomeArchivio, Responsabile responsabile) {
 
-
         this.nomeArchivio = nomeArchivio;
         this.responsabile = responsabile;
         this.fotografie = new ArrayList<>();
     }
 
-
+    public Archivio() {
+        this.fotografie = new ArrayList<>();
+    }
 
     public void aggiungiFoto(Fotografia foto) {
 
@@ -49,7 +48,10 @@ public class Archivio implements Serializable {
         return nomeArchivio;
     }
 
-
+    public Responsabile getResponsabile() {
+        return responsabile;
+    }
+    
     public List<Fotografia> getFotografie() {
         return fotografie;
     }
@@ -57,9 +59,10 @@ public class Archivio implements Serializable {
     
     @Override
     public String toString() {
-        return "Archivio: " + nomeArchivio + " - " + responsabile.toString();
+        return "Archivio: " + nomeArchivio + " - " + responsabile;
     }
 }
+
 
 
 // this class represents an archive that contains photographs and is managed by a responsible person.
