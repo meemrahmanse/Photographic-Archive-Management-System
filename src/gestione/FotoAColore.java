@@ -15,6 +15,7 @@ public class FotoAColore extends Fotografia {
 
     }
 
+    public FotoAColore() {}
 
 
     // Getter e Setter
@@ -33,5 +34,6 @@ public class FotoAColore extends Fotografia {
         return super.toString() + ", Tipo Stampa: " + tipoStampa;
     }
 }
+
 
 // this class represents a color photograph with a specific type of print (glossy or matte).
