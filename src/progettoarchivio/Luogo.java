@@ -26,7 +26,7 @@ public class Luogo extends Soggetto {
         this.descrizione = descrizione != null ? descrizione.trim() : "";
     }
 
-    public Luogo(){}
+    public Luogo (){}
 
     private String validaNome(String nome) {
         
@@ -61,4 +61,3 @@ public class Luogo extends Soggetto {
     }
 
 }
-
