@@ -11,29 +11,27 @@ public enum Genere {
     F("Femmina"),
     A("Altro");
 
-    private final String descrizione;
+    private final String etichetta;
 
-    /** Costruttore privato per la descrizione leggibile. */
+    /** Costruttore privato per la etichetta leggibile. */
 
-    Genere(String descrizione) {
+    Genere(String etichetta) {
         
-        this.descrizione = descrizione;
+        this.etichetta = etichetta;
     }
 
-    /** Restituisce la descrizione leggibile */
+/** Restituisce l'etichetta leggibile del genere. */
     
-    public String getDescrizione() {
-        return descrizione;
+    public String getEtichetta() { 
+        
+        return etichetta; 
     }
 
-    @Override
-    public String toString() {
-        return descrizione;
-    }
 
 /**
      * Converte un char in Genere.
-     * @param c carattere ('M', 'm', 'F', f', 'A', 'a')
+     * Accetta "M", "F", "A" maiuscolo o minuscolo 
+     * @param c carattere
      * @return sesso corrispondente
      * @throws IllegalArgumentException se non valido
      */
@@ -45,10 +43,7 @@ public enum Genere {
             case 'M' -> M;
             case 'F' -> F;
             case 'A' -> A;
-            default -> throw new IllegalArgumentException(
-                    
-                "\nGenere non valido: '%c'. Perfavore inserisca 'M' per maschio, 'F' per femmina oppure 'A' per altro!".formatted(c)
-            );
+            default -> throw new IllegalArgumentException("Sesso non valido: '%c'. Per favore usi 'M', 'F' oppure 'A'!".formatted(c));
         };
     }
     
@@ -62,19 +57,28 @@ public enum Genere {
     
     public static Genere fromString(String s) {
         
-        if (s == null) {
+        if (s == null || s.trim().isEmpty()) {
             
-            throw new IllegalArgumentException("\nQuesto campo è obbligatorio, perfavore inserisca il sesso!");
+            throw new IllegalArgumentException("Per favore inserisca il sesso!");
         }
     
+        
     return switch (s.trim().toUpperCase()) {
         
         case "M", "MASCHIO" -> M;
         case "F", "FEMMINA" -> F;
-        case "A", "ALTRO"-> A;
+        case "A", "ALTRO", "X" -> A;
             
-        default -> throw new IllegalArgumentException("Sesso non valido: '%s'.".formatted(s));
+        default -> throw new IllegalArgumentException(String.format("Sesso non valido: '%s'. Usa 'M', 'F' oppure 'A'.", s));
     };
 }
-
+/**
+     * Override di toString() per una rappresentazione più leggibile.
+*/
+    
+    @Override
+    public String toString() {
+        
+        return etichetta;
+    }
 }
