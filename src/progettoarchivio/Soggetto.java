@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public abstract class Soggetto {
     
-    private final String key; //final = immodificabile
+    private String key; 
     
 /**
      * Costruisce un Soggetto con chiave valida.
@@ -36,7 +36,9 @@ public abstract class Soggetto {
     public String getKey() {
         return key;
     }
-    
+
+    protected Soggetto() {}
+
 /** Restituisce una descrizione testuale del soggetto */
     public abstract String getDescription();
     
@@ -96,4 +98,5 @@ public abstract class Soggetto {
  * getClass() prende la classe reale, getSimpleName() solo il nome per avere solo il nome della classe, senza il pacchetto
 
  */
+
 
