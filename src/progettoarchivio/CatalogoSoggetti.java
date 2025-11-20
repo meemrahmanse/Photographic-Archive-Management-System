@@ -1,6 +1,10 @@
 package progettoarchivio;
 
-import java.util.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.NoSuchElementException;
 
 /**
  * Catalogo centrale dei soggetti fotografati.
@@ -9,24 +13,18 @@ import java.util.*;
  */
 
 public final class CatalogoSoggetti {
-
-    /** Unica istanza del catalogo */
-    
+    /** Unica istanza del catalogo */    
     private static final class Holder {
         
         static final CatalogoSoggetti ISTANZA = new CatalogoSoggetti();
     }
 
-    /** Mappa: chiave (maiuscola, trimmed) → Soggetto */
-    
-    private final Map<String, Soggetto> soggetti;
+public CatalogoSoggetti (){}
 
-    /** Costruttore privato = inizializza la mappa */
+    /** Mappa: chiave (maiuscola, trimmed) → Soggetto */  
+    private final Map<String, Soggetto> soggetti = new ConcurrentHashMap<>(); 
+
     
-    private CatalogoSoggetti() {
-        
-        this.soggetti = new HashMap<>();
-    }
 
     /** Restituisce l'unica istanza del catalogo */
     
@@ -40,7 +38,7 @@ public final class CatalogoSoggetti {
      * @param s = soggetto da aggiungere 
      * @throws IllegalArgumentException se s è null o chiave già esistente
      */
-    public CatalogoSoggetti(){}
+    
     public void aggiungiSoggetto(Soggetto s) {
         
         if (s == null) {
@@ -118,8 +116,7 @@ public final class CatalogoSoggetti {
             
             throw new IllegalArgumentException("Questo campo è obbligatorio, perfavore inserisca la chiave!");
         }
-        return chiave.trim().toUpperCase();
+        return chiave.trim().replaceAll("\\s+", "").toUpperCase();
     }
 
 }
-
