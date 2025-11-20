@@ -26,6 +26,8 @@ public class Oggetto extends Soggetto {
         this.descrizione = descrizione != null ? descrizione.trim() : "";
     }
 
+    public Oggetto(){}
+
     private String validaNome(String nome) {
         
         if (nome == null || nome.trim().isEmpty()){
@@ -60,3 +62,4 @@ public class Oggetto extends Soggetto {
     }
 
 }
+
