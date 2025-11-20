@@ -26,7 +26,7 @@ public class Oggetto extends Soggetto {
         this.descrizione = descrizione != null ? descrizione.trim() : "";
     }
 
-    public Oggetto(){}
+    public Oggetto (){}
 
     private String validaNome(String nome) {
         
@@ -62,4 +62,3 @@ public class Oggetto extends Soggetto {
     }
 
 }
-
