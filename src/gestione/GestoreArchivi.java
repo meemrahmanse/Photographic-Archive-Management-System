@@ -60,7 +60,7 @@ public void modificaArchivio(String nomeArchivio, Archivio archivioModificato) {
     try (Writer writer = new FileWriter(NOME_FILE)) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         gson.toJson(archivi, writer);
-        System.out.println("Dati salvati con successo su archivi.json");
+        System.out.println("Dati salvati con successo su " + NOME_FILE);
     } catch (IOException e) {
         System.err.println("Errore durante il salvataggio JSON: " + e.getMessage());
     }
@@ -69,7 +69,7 @@ public void modificaArchivio(String nomeArchivio, Archivio archivioModificato) {
     // method to load the archives from file
     @SuppressWarnings("unchecked")
    public void caricaDaFile() {
-    File file = new File("archivi.json");
+    File file = new File(NOME_FILE);
     if (!file.exists()) {
         archivi = new HashMap<>();
         return;
@@ -91,3 +91,4 @@ public void modificaArchivio(String nomeArchivio, Archivio archivioModificato) {
 
 
 // this class manages multiple archives, allowing saving and loading from a file.
+
