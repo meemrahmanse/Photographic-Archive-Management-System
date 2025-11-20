@@ -41,6 +41,8 @@ public class Personaggio extends Soggetto {
 
     }
 
+    public Personaggio(){}
+
     private String validaNome(String name) {
         
         if (name == null || name.trim().isEmpty()) {
@@ -121,3 +123,4 @@ public class Personaggio extends Soggetto {
 
 
 //?: if else
+
