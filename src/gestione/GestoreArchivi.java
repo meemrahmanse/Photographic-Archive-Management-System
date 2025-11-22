@@ -1,6 +1,6 @@
 // GestoreArchivi.java - meem
 
-package gestione;
+package progettoarchivio;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,84 +11,150 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-// this class manage diffrent archives, saving and loading from files.
+/**
+ * GestoreArchivi è un singleton che gestisce più archivi fotografici.
+ * Permette di aggiungere, modificare, eliminare e salvare/caricare archivi da file JSON.
+ */
+
 public class GestoreArchivi {
 
-    private static GestoreArchivi instance;
+    private static volatile GestoreArchivi instance; //thread-safe singleton
     private Map<String, Archivio> archivi;
     private final String NOME_FILE = "archivio.json";
 
-    private GestoreArchivi() {
+//costruttore privato
+private GestoreArchivi() {
+    
         archivi = new HashMap<>();
         caricaDaFile();
-    }
+}
 
-    // this is a singleton pattern to shure one instance only.
+/**
+* Restituisce l'istanza unica del gestore.
+*/
     public static synchronized GestoreArchivi getInstance() {
+        
         if (instance == null) {
+            
             instance = new GestoreArchivi();
         }
         return instance;
     }
 
-    //this is a method to add an archive to the manager.
+/**
+* Aggiunge un archivio al gestore.
+* Se esiste già un archivio con lo stesso nome, viene sovrascritto.
+*/
+    
     public void aggiungiArchivio(Archivio archivio) {
+        
+        if (archivio == null || archivio.getNomeArchivio() == null || archivio.getNomeArchivio().isEmpty()) {
+            
+            throw new IllegalArgumentException("Archivio non valido: nome mancante o archivio nullo!");
+        }
         archivi.put(archivio.getNomeArchivio(), archivio);
         salvaSuFile();
     }
 
+/**
+* Elimina un archivio dato il nome.
+*/
     public void eliminaArchivio(String nomeArchivio) {
-    archivi.remove(nomeArchivio);
-    salvaSuFile();
-}
-
+        
+    if (nomeArchivio == null || nomeArchivio.isEmpty()) {
+        
+            throw new IllegalArgumentException("Nome archivio non valido!");
+        }
+    
+        archivi.remove(nomeArchivio);
+        salvaSuFile();
+    }
+    
+/**
+* Modifica un archivio esistente sostituendolo con uno nuovo.
+*/
+    
 public void modificaArchivio(String nomeArchivio, Archivio archivioModificato) {
+    
+    if (nomeArchivio == null || nomeArchivio.isEmpty() || archivioModificato == null) {
+        
+            throw new IllegalArgumentException("Parametri non validi per la modifica dell'archivio.");
+        }
     archivi.put(nomeArchivio, archivioModificato);
     salvaSuFile();
 }
-    // method to get an archive by name
-    public Archivio getArchivio(String nomeArchivio) {
+/**
+* Restituisce un archivio dato il nome.
+*/
+
+public Archivio getArchivio(String nomeArchivio) {
+    
         return archivi.get(nomeArchivio);
-    }
+}
 
-    public Map<String, Archivio> getArchivi() {
-        return archivi;
-    }
+    /**
+     * Restituisce una copia della mappa degli archivi.
+     */
 
-    // method to save the archives to a file
-    public void salvaSuFile() {
+public Map<String, Archivio> getArchivi() {
+        
+        return new HashMap<>(archivi);
+}
+
+    /**
+     * Salva gli archivi su file JSON.
+     */
+
+public void salvaSuFile() {
+    
     try (Writer writer = new FileWriter(NOME_FILE)) {
+        
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        
         gson.toJson(archivi, writer);
+        
         System.out.println("Dati salvati con successo su " + NOME_FILE);
     } catch (IOException e) {
+        
         System.err.println("Errore durante il salvataggio JSON: " + e.getMessage());
     }
 }
 
-    // method to load the archives from file
-    @SuppressWarnings("unchecked")
-   public void caricaDaFile() {
-    File file = new File(NOME_FILE);
-    if (!file.exists()) {
-        archivi = new HashMap<>();
-        return;
-    }
+     /**
+     * Carica gli archivi da file JSON.
+     */
+    public void caricaDaFile() {
+        
+        File file = new File(NOME_FILE);
+
+        if (!file.exists()) {
+            
+            archivi = new HashMap<>();
+            return;
+        }
 
     try (Reader reader = new FileReader(file)) {
+        
         Gson gson = new Gson();
         Type tipo = new TypeToken<HashMap<String, Archivio>>() {}.getType();
+        
         archivi = gson.fromJson(reader, tipo);
-        if (archivi == null) archivi = new HashMap<>();
-        System.out.println("Dati caricati con successo da archivi.json");
-    } catch (IOException e) {
+        
+        if (archivi == null){
+            
+            archivi = new HashMap<>();
+        }
+        System.out.println("Dati caricati con successo da " + NOME_FILE);
+    
+    } catch (Exception e) {
+        
         System.err.println("Errore durante il caricamento JSON: " + e.getMessage());
         archivi = new HashMap<>();
+        
+        }
     }
-}
 }
 
 
 
 // this class manages multiple archives, allowing saving and loading from a file.
-
