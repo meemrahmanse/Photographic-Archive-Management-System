@@ -17,9 +17,19 @@ public enum AttivitaPrevalente {
     }
 
     public static AttivitaPrevalente daStringa(String s) {
-        if (s == null) return ALTRO;
+        
+        if (s == null) {
+            
+            return ALTRO;
+        }
+        String str = s.trim();
+        
         for (AttivitaPrevalente a : values()) {
-            if (a.label.equalsIgnoreCase(s.trim())) return a;
+            
+            if (a.label.equalsIgnoreCase(str)){
+                
+                return a;
+            }
         }
         return ALTRO;
     }
