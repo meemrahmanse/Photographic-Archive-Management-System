@@ -61,9 +61,9 @@ public enum Genere {
             
             throw new IllegalArgumentException("Per favore inserisca il sesso!");
         }
-    
+        String upper = s.trim().toUpperCase();
         
-    return switch (s.trim().toUpperCase()) {
+    return switch (upper) {
         
         case "M", "MASCHIO" -> M;
         case "F", "FEMMINA" -> F;
