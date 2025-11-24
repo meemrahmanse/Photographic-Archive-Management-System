@@ -14,9 +14,11 @@ public class Personaggio extends Soggetto {
     private final Genere sesso; // m, f, a    
     private final int nascita;    
     private final boolean morte;
+    
     private static final int MIN_ANNO = 0;
     private static final int ANNO_CORRENTE = Year.now().getValue();
-   /**
+   
+    /**
      * Costruisce Personaggio con tutti i dati anagrafici
      * @param key = chiave univoca (validata in Soggetto)
      * @param nome = nome completo 
@@ -27,50 +29,49 @@ public class Personaggio extends Soggetto {
      * * @throws NullPointerException     se sesso è null
      */
 
-    public Personaggio(String key, String nome, Genere sesso, boolean morte, int nascita) {
+    public Personaggio(String key, String nome, char sesso, boolean morte, int nascita) {
         
         super(key);
         
         this.nome = validaNome(nome);   
-        this.sesso = sesso = Objects.requireNonNull(sesso, "E' obbligatorio inserire il sesso!");
+        this.sesso = Genere.daChar(sesso);
         this.nascita = validaNascita(nascita);
         this.morte = morte;      
 
     }
 
-    public Personaggio (){}
+    public Personaggio (){
+    
+        this.nome = null;
+        this.sesso = null;
+        this.nascita = 0;
+        this.morte = false;
+    }
 /**
      * Valida e normalizza il nome della persona.
 */
     private static String validaNome(String name) {
         
-        if (name == null) {
+        if (name == null || name.trim().isEmpty()) {
             
             throw new IllegalArgumentException("Il nome del personaggio è obbligatorio!");
         }
-        String trimmed = name.trim();
-        
-        if (trimmed.isEmpty()) {
-            
-            throw new IllegalArgumentException("Il nome non può essere vuoto!");
-        }
-        return trimmed;
+        return name.trim();
     }
-
 /**
      * Valida l'anno di nascita.
 */    
     private static int validaNascita(int anno) {
         
-        int annoCorrente = Year.now().getValue();
-        
         if (anno < MIN_ANNO || anno > ANNO_CORRENTE) {
             
-            throw new IllegalArgumentException(String.format("Anno di nascita non valido: %d. Per favore inserisca un valore tra 0 e %d", anno, annoCorrente));
+            throw new IllegalArgumentException(String.format("Anno di nascita non valido: %d. Per favore inserisca un valore tra %d e %d", anno, MIN_ANNO, ANNO_CORRENTE));
         }
         return anno;
     }
 
+//getters
+    
     public String getNome() { 
         
         return nome; 
