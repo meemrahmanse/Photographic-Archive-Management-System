@@ -1,6 +1,6 @@
 // Responsabile.java - meem
 
-package gestione;
+package progettoarchivio;
 
 
 // this class represents a responsible person managing an archive with their context details.
@@ -24,48 +24,56 @@ public class Responsabile {
 
     // Getters and Setters
     public String getNome() {
-        return nome;
+        
+        return this.nome;
     }
 
 
     public void setNome(String nome) {
+        
         this.nome = nome;
     }
 
 
     public String getIndirizzo() {
-        return indirizzo;
+        
+        return this.indirizzo;
     }
 
 
     public void setIndirizzo(String indirizzo) {
+        
         this.indirizzo = indirizzo;
     }
 
 
     public String getTelefono() {
-        return telefono;
+        
+        return this.telefono;
     }
 
 
     public void setTelefono(String telefono) {
+        
         this.telefono = telefono;
     }
 
 
     public String getOrarioApertura() {
-        return orarioApertura;
+        
+        return this.orarioApertura;
     }
 
 
     public void setOrarioApertura(String orarioApertura) {
+        
         this.orarioApertura = orarioApertura;
     }
 
     
     @Override
     public String toString() {
-        return "Responsabile: " + nome + ", Indirizzo: " + indirizzo + ", Tel: " + telefono + ", Orari: " + orarioApertura;
+        return "Responsabile [Nome: " + nome + ", Indirizzo: " + indirizzo + ", Telefono: " + telefono + ", Orario: " + orarioApertura + "]";
     }
 }
 
