@@ -9,10 +9,10 @@ import java.time.Year;
 
 public class OperaArte extends Soggetto {
     
-    private final String nomeOpera;  
-    private final String artista;   
-    private final String luogo;
-    private final int anno;
+    private String nomeOpera;  
+    private String artista;   
+    private String luogo;
+    private int anno;
 
     /**
      * Costruisce OperaArte.
@@ -40,7 +40,7 @@ public class OperaArte extends Soggetto {
         
         if (nome == null || nome.trim().isEmpty()){
             
-            throw new IllegalArgumentException("\nQuesto campo è obbligatorio, perfavore inserisca il nome dell'opera!");
+            throw new IllegalArgumentException("Inserire il nome dell'opera è obbligatorio!");
         }
         return nome.trim();
     }
@@ -49,7 +49,7 @@ public class OperaArte extends Soggetto {
         
         if (artista == null || artista.trim().isEmpty()) {
             
-            throw new IllegalArgumentException("\nQuesto campo è obbligatorio, perfavore inserisca il n ome dell'artista!");
+            throw new IllegalArgumentException("Inserire il nome dell'artista è obbligatorio!");
         }
         return artista.trim();
     }
@@ -58,23 +58,24 @@ public class OperaArte extends Soggetto {
         
         if (luogo == null || luogo.trim().isEmpty()){
             
-            throw new IllegalArgumentException("\nQuesto campo è obbligatorio, perfavore inserisca il luogo dell'opera!");
+            throw new IllegalArgumentException("Inserire il nome del luogo è obbligatorio!");
         }
         return luogo.trim();
     }
 
     private int validaAnno(int anno) {
+        
         int annoCorrente = Year.now().getValue();
+        
         if (anno < 0 || anno > annoCorrente){
             
-            throw new IllegalArgumentException(
-                    
-                    String.format("L'anno inserito non è valido: %d. Perfavore inserisca un valore tra 0 e 2026", anno)
-            );
+            throw new IllegalArgumentException(String.format("L'anno inserito non è valido: %d. Perfavore inserisca un valore tra 0 e %d", anno, annoCorrente));
         }
         return anno;
     }
 
+    //getters
+    
     public String getNomeOpera() { 
         
         return nomeOpera;
