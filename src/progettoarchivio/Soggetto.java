@@ -16,7 +16,6 @@ public abstract class Soggetto {
 /**
      * Costruisce un Soggetto con chiave valida.
      * @param key chiave del soggetto (obbligatoria e solo A-Z e 0-9)
-     * @throws IllegalArgumentException se la chiave è invalida
 */
 
     public Soggetto(String key) {
@@ -41,12 +40,15 @@ public abstract class Soggetto {
         this.key = normalized;
     }
 
-public Soggetto (){}
+public Soggetto (){
     
-    public String getKey() {
+    this.key = null;
+}
+
+ public String getKey() {
+     
         return key;
     }
-    
 /** 
 *Restituisce una descrizione testuale del soggetto 
 * @return descrizione leggibile del soggetto (es. nome, luogo, evento)
@@ -63,13 +65,15 @@ public Soggetto (){}
     
     public boolean matchesKey(String query) {
         
-    if (query == null || query.trim().isBlank()) {    //se il campo è vuoto non posso ricercarlo
+    if (query == null || query.trim().isEmpty()) {    //se il campo è vuoto non posso ricercarlo
+        
         return false;
     }
 
     //true se parte è dentro key, false altrimenti es: chiave=ABC123, query=123 → true    
     String normalizedQuery = query.trim().toUpperCase(Locale.ROOT);
-    return key.contains(normalizedQuery);
+    return key != null && key.contains(normalizedQuery);
+    
   }
 
 
