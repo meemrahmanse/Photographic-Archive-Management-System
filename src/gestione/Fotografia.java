@@ -1,61 +1,109 @@
 // Fotografia.java - meem
 
-package gestione;
+package progettoarchivio;
 
-import progettoarchivio.Soggetto;
+import java.util.Objects;
+        
+/**
+ * Rappresenta una fotografia con attributi di base:
+ * - ID univoco
+ * - Dimensione
+ * - Stato di conservazione (enum)
+ * - Soggetto fotografato
+ */
 
-
-// represent photograph with its basic attributes
 public class Fotografia {
 
     private String idFoto;
-    private String dimensione;
-    private String statoConservazione;
+    private int dimensione;
+    private StatoConservazione statoConservazione;
     private Soggetto soggetto;
 
-    // java constructor
-    public Fotografia(String idFoto, String dimensione, String statoConservazione, Soggetto soggetto) {
+    // costruttore principale
+    public Fotografia(String idFoto, int dimensione, StatoConservazione statoConservazione, Soggetto soggetto) {
 
-        this.idFoto = idFoto;
+        if (idFoto == null || idFoto.trim().isEmpty()) {
+            
+            throw new IllegalArgumentException("ID foto non valido!");
+        }
+        
+        if (dimensione <= 0) {
+            
+            throw new IllegalArgumentException("La dimensione deve essere positiva!");
+        }
+        
+        this.idFoto = idFoto.trim();
         this.dimensione = dimensione;
-        this.statoConservazione = statoConservazione;
+        this.statoConservazione = Objects.requireNonNull(statoConservazione, "Il stato di conservazione non puo essere vuoto!");
         this.soggetto = soggetto;
     }
 
+    //costruttore vuoto
     public Fotografia() {}
 
+    //getter & setter
+    
     public String getIdFoto() {
+        
         return idFoto;
     }
 
 
     public void setIdFoto(String idFoto) {
-        this.idFoto = idFoto;
+        
+        if (idFoto == null || idFoto.trim().isEmpty()){
+        
+            throw new IllegalArgumentException("ID foto non valido!");
+        }
+        this.idFoto = idFoto.trim();
     }
 
 
-    public String getDimensione() {
+    public int getDimensione() {
+        
         return dimensione;
     }
 
 
-    public void setDimensione(String dimensione) {
+    public void setDimensione(int dimensione) {
+        
+        if (dimensione <= 0) {
+            
+            throw new IllegalArgumentException("La dimensione deve essere positiva!");
+        }
         this.dimensione = dimensione;
     }
 
 
-    public String getStatoConservazione() {
+    public StatoConservazione getStatoConservazione() {
+        
         return statoConservazione;
     }
 
-
+    /**
+     * Setter con conversione da String → enum.
+     */
+    
     public void setStatoConservazione(String statoConservazione) {
-        this.statoConservazione = statoConservazione;
+        
+    if (statoConservazione == null || statoConservazione.isEmpty()) {
+        
+        throw new IllegalArgumentException("Stato di conservazione non valido!");
     }
+    try {
+        
+        this.statoConservazione = StatoConservazione.valueOf(statoConservazione.trim(). toUpperCase());
+    } catch (IllegalArgumentException e) {
+        
+        throw new IllegalArgumentException("Valore non riconosciuto per stato di conservazione: " + statoConservazione);
+    }
+}
+
 
 
     public Soggetto getSoggetto() {
-        return soggetto;
+        
+        return this.soggetto;
     }
 
 
@@ -66,8 +114,33 @@ public class Fotografia {
     
     // string representation of the photograph
     @Override
+    
     public String toString() {
-        return "ID: " + idFoto + ", Dimensione: " + dimensione + ", Stato: " + statoConservazione + ", Soggetto: " + soggetto;
+        return "Fotografia [ID: " + idFoto + ", Dimensione: " + dimensione + ", Stato: " + statoConservazione + ", Soggetto: " + soggetto + "]";
+    }
+    
+    @Override
+    
+    public boolean equals(Object obj) {
+        
+        if (this == obj) {
+            
+            return true;
+        }
+        
+        if (!(obj instanceof Fotografia)) {
+            
+            return false;
+        }
+        Fotografia other = (Fotografia) obj;
+        
+        return idFoto != null && idFoto.equals(other.idFoto);
+    }
+
+    @Override
+    public int hashCode() {
+        
+        return idFoto != null ? idFoto.hashCode() : 0;
     }
 }
 
