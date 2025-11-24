@@ -4,7 +4,7 @@ package progettoarchivio;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
 
 public class Archivio {
 
@@ -15,31 +15,50 @@ public class Archivio {
 //costruttore principale
 public Archivio(String nomeArchivio, Responsabile responsabile) {
 
-        this.nomeArchivio = nomeArchivio;
-        this.responsabile = responsabile;
+        this.nomeArchivio = Objects.requireNonNull(nomeArchivio, "Il nome dell'archivio non può essere vuoto!");
+        this.responsabile = Objects.requireNonNull(responsabile, "Il responsabile non può essere vuoto!");
         this.fotografie = new ArrayList<>();
 }
 
 //costruttore vuoto per caricamenti da file
 public Archivio() {
         
+        this.nomeArchivio = "";
+        this.responsabile = null;
         this.fotografie = new ArrayList<>();
 }
 /**
     * Aggiunge una fotografia all'archivio.
     * Se l'ID è già presente, non la inserisce per evitare duplicati.
 */
+
 public void aggiungiFoto(Fotografia foto) {
 
     if (foto == null) {
         
             throw new IllegalArgumentException("La foto non può essere vuota!");
         }
-        if (cercaFoto(foto.getIdFoto()) != null) {
+    
+    if (cercaFoto(foto.getIdFoto()) != null) {
             
             throw new IllegalArgumentException("La foto con ID '" + foto.getIdFoto() + "' è già presente nell'archivio!");
         }
-        this.fotografie.add(foto);
+    
+        
+    String id = foto.getIdFoto();
+
+    if (id == null || id.isEmpty()) {
+        
+            throw new IllegalArgumentException("La fotografia deve avere un ID valido!");
+        }
+
+        if (cercaFoto(id) != null) {
+            
+            throw new IllegalArgumentException("La foto con ID '" + id + "' è già presente nell'archivio!");
+        }
+
+        fotografie.add(foto);
+    
     }
 
     /**
@@ -64,6 +83,7 @@ public void aggiungiFoto(Fotografia foto) {
     public Fotografia cercaFoto(String idFoto) {
         
         if (idFoto == null || idFoto.isEmpty()) {
+            
             return null;
         }
         
