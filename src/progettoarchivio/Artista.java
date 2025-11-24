@@ -23,7 +23,8 @@ public class Artista extends Personaggio {
      * @throws IllegalArgumentException se l'attività vuota
      */
     public Artista(String key, String nome, char sesso, boolean morte, int nascita, String attivita) {
-        super(key, nome, Genere.daChar(sesso), morte, nascita);
+        
+        super(key, nome, sesso, morte, nascita);
 
         String attivitaTrimmed = validaAttivita(attivita);
 
@@ -49,7 +50,7 @@ public class Artista extends Personaggio {
     
     public Artista(String key, String nome, char sesso, boolean morte, int nascita, AttivitaPrevalente tipo) {
         
-        super(key, nome, Genere.daChar(sesso), morte, nascita);
+        super(key, nome, sesso, morte, nascita);
         
         if (tipo == AttivitaPrevalente.ALTRO) {
             
@@ -58,9 +59,16 @@ public class Artista extends Personaggio {
         
         this.tipoAttivita = tipo;
         this.attivitaCustom = null;
-        this.descrizioneAttivita = tipo.getLabel();
+        this.descrizioneAttivita = "";
     }
-    public Artista (){}
+    
+    public Artista (){
+            
+        this.tipoAttivita = AttivitaPrevalente.ALTRO;
+        this.attivitaCustom = null;
+        this.descrizioneAttivita = null;
+
+    }
 /**
      * Valida e normalizza l'attività testuale.
      *
@@ -71,20 +79,18 @@ public class Artista extends Personaggio {
     
     private static String validaAttivita(String attivita) {
         
-        if (attivita == null) {
+        if (attivita == null || attivita.trim().isEmpty()) {
             
             throw new IllegalArgumentException("L'inserimento dell'attività prevalente è obbligatoria!");
         }
-        String trimmed = attivita.trim();
         
-        if (trimmed.isEmpty()) {
-            
-            throw new IllegalArgumentException("L'attività prevalente non può essere vuota!");
-        }
-        return trimmed;
+        return attivita.trim();
     }
 
+//getters
+    
     public AttivitaPrevalente getTipoAttivita() {
+        
         return tipoAttivita;
     }
 /**
@@ -93,6 +99,7 @@ public class Artista extends Personaggio {
 */
     
     public String getAttivitaCustom() {
+        
         return attivitaCustom != null ? attivitaCustom : "";
     }
 
@@ -101,16 +108,20 @@ public class Artista extends Personaggio {
      * @return descrizione leggibile
 */
     public String getDescrizioneAttivita() {
+        
         return descrizioneAttivita;
     }
 
     @Override
     public String getDescription() {
+        
         return super.getDescription() + " - Artista: " + descrizioneAttivita;
     }
 
     @Override
+    
     public String toString() {
+        
         return super.toString() + " - Artista: " + descrizioneAttivita;
     }
 }
