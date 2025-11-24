@@ -7,8 +7,8 @@ package progettoarchivio;
 
 public class Luogo extends Soggetto {
     
-    private final String nome;
-    private final String descrizione;
+    private String nome;
+    private String descrizione;
     
 /**
      * Costruisce Luogo
@@ -32,7 +32,7 @@ public class Luogo extends Soggetto {
         
         if (nome == null || nome.trim().isEmpty()) {
             
-            throw new IllegalArgumentException("\nQuesto campo è obbligatorio, perfavore inserisce il nome del luogo!");
+            throw new IllegalArgumentException("Il nome del luogo è obbligatorio!");
         }
         return nome.trim();
     }
