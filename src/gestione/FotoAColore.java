@@ -1,37 +1,51 @@
 // FotoAColore.java - meem
 
-package gestione;
+package progettoarchivio;
 
-import progettoarchivio.Soggetto;
+/**
+ * Foto a colori: estende Fotografia aggiungendo il tipo di stampa
+ * (es. "chiaro", "opaco").
+ */
 
 public class FotoAColore extends Fotografia {
 
     private String tipoStampa; // "chiaro" o "opaco"
-
+    
+  // costruttore principale che delega al costruttore di Fotografia
+    
     public FotoAColore(String idFoto, String dimensione, String statoConservazione, Soggetto soggetto, String tipoStampa) {
 
-        super(idFoto, dimensione, statoConservazione, soggetto);
-        this.tipoStampa = tipoStampa;
+        super(idFoto, Integer.parseInt(dimensione), StatoConservazione.valueOf(statoConservazione.toUpperCase()), soggetto);
+        this.tipoStampa = tipoStampa != null ? tipoStampa.trim() : "";
 
     }
 
-    public FotoAColore() {}
+//costruttore vuoto
+    public FotoAColore() {
+    
+    super();
+    this.tipoStampa = "";
+    }
 
 
     // Getter e Setter
     public String getTipoStampa() {
-        return tipoStampa;
+        
+        return this.tipoStampa;
     }
 
 
     public void setTipoStampa(String tipoStampa) {
-        this.tipoStampa = tipoStampa;
+        
+        this.tipoStampa = tipoStampa != null ? tipoStampa.trim() : "";
     }
 
     
     @Override
+    
     public String toString() {
-        return super.toString() + ", Tipo Stampa: " + tipoStampa;
+        
+        return super.toString() + ", Tipo di stampa: " + tipoStampa;
     }
 }
 
