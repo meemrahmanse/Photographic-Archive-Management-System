@@ -5,13 +5,13 @@ package progettoarchivio;
 
 public class Politico extends Personaggio {
     
-    private final String partito;
+    private String partito;
     
-    private final String carica; // opzionale
+    private String carica; // opzionale
 
     public Politico(String key, String nome, char sesso, boolean morte, int nascita, String partito, String carica) {
         
-        super(key, nome, Genere.daChar(sesso), morte, nascita);
+        super(key, nome, sesso, morte, nascita);
         
         this.partito = validaPartito(partito);
         
@@ -44,7 +44,7 @@ public class Politico extends Personaggio {
     
     public String getDescription() {
         
-        return super.getDescription() + " - " + partito + (carica.isEmpty() ? "" : ", " + carica);
+        return super.getDescription() + " - " + partito + ", " + getCarica();
     }
 
 }
