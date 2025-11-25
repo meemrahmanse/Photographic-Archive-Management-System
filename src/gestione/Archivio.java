@@ -1,127 +1,148 @@
-// Archivio.java - meem
+// Fotografia.java - meem
 
 package progettoarchivio;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
-public class Archivio {
-
-    private String nomeArchivio;
-    private Responsabile responsabile;
-    private List<Fotografia> fotografie;
-
-//costruttore principale
-public Archivio(String nomeArchivio, Responsabile responsabile) {
-
-        this.nomeArchivio = Objects.requireNonNull(nomeArchivio, "Il nome dell'archivio non può essere vuoto!");
-        this.responsabile = Objects.requireNonNull(responsabile, "Il responsabile non può essere vuoto!");
-        this.fotografie = new ArrayList<>();
-}
-
-//costruttore vuoto per caricamenti da file
-public Archivio() {
         
-        this.nomeArchivio = "";
-        this.responsabile = null;
-        this.fotografie = new ArrayList<>();
-}
 /**
-    * Aggiunge una fotografia all'archivio.
-    * Se l'ID è già presente, non la inserisce per evitare duplicati.
-*/
+ * Rappresenta una fotografia con attributi di base:
+ * - ID univoco
+ * - Dimensione
+ * - Stato di conservazione (enum)
+ * - Soggetto fotografato
+ */
 
-public void aggiungiFoto(Fotografia foto) {
+public class Fotografia {
 
-    if (foto == null) {
-        
-            throw new IllegalArgumentException("La foto non può essere vuota!");
-        }
-    
-    if (cercaFoto(foto.getIdFoto()) != null) {
+    private String idFoto;
+    private int dimensione;
+    private StatoConservazione statoConservazione;
+    private Soggetto soggetto;
+
+    // costruttore principale
+    public Fotografia(String idFoto, int dimensione, StatoConservazione statoConservazione, Soggetto soggetto) {
+
+        if (idFoto == null || idFoto.trim().isEmpty()) {
             
-            throw new IllegalArgumentException("La foto con ID '" + foto.getIdFoto() + "' è già presente nell'archivio!");
+            throw new IllegalArgumentException("ID foto non valido!");
         }
-    
         
-    String id = foto.getIdFoto();
-
-    if (id == null || id.isEmpty()) {
-        
-            throw new IllegalArgumentException("La fotografia deve avere un ID valido!");
-        }
-
-        if (cercaFoto(id) != null) {
+        if (dimensione <= 0) {
             
-            throw new IllegalArgumentException("La foto con ID '" + id + "' è già presente nell'archivio!");
+            throw new IllegalArgumentException("La dimensione deve essere positiva!");
         }
+        
+        this.idFoto = idFoto.trim();
+        this.dimensione = dimensione;
+        this.statoConservazione = Objects.requireNonNull(statoConservazione, "Il stato di conservazione non puo essere vuoto!");
+        this.soggetto = soggetto;
+    }
 
-        fotografie.add(foto);
+    //costruttore vuoto
+    public Fotografia() {}
+
+    //getter & setter
     
+    public String getIdFoto() {
+        
+        return idFoto;
+    }
+
+
+    public void setIdFoto(String idFoto) {
+        
+        if (idFoto == null || idFoto.trim().isEmpty()){
+        
+            throw new IllegalArgumentException("ID foto non valido!");
+        }
+        this.idFoto = idFoto.trim();
+    }
+
+
+    public int getDimensione() {
+        
+        return dimensione;
+    }
+
+
+    public void setDimensione(int dimensione) {
+        
+        if (dimensione <= 0) {
+            
+            throw new IllegalArgumentException("La dimensione deve essere positiva!");
+        }
+        this.dimensione = dimensione;
+    }
+
+
+    public StatoConservazione getStatoConservazione() {
+        
+        return statoConservazione;
     }
 
     /**
-     * Rimuove una fotografia dato il suo ID.
-     * @return true se la foto è stata rimossa, false se non trovata.
+     * Setter con conversione da String → enum.
      */
-
-    public boolean rimuoviFoto(String idFoto) {
+    
+    public void setStatoConservazione(String statoConservazione) {
         
-        if (idFoto == null || idFoto.isEmpty()) {
+    if (statoConservazione == null || statoConservazione.isEmpty()) {
+        
+        throw new IllegalArgumentException("Stato di conservazione non valido!");
+    }
+    try {
+        
+        this.statoConservazione = StatoConservazione.valueOf(statoConservazione.trim(). toUpperCase());
+    } catch (IllegalArgumentException e) {
+        
+        throw new IllegalArgumentException("Valore non riconosciuto per stato di conservazione: " + statoConservazione);
+    }
+}
+
+
+
+    public Soggetto getSoggetto() {
+        
+        return this.soggetto;
+    }
+
+
+    public void setSoggetto(Soggetto soggetto) {
+        this.soggetto = soggetto;
+    }
+
+    
+    // string representation of the photograph
+    @Override
+    
+    public String toString() {
+        return "Fotografia [ID: " + idFoto + ", Dimensione: " + dimensione + ", Stato: " + statoConservazione + ", Soggetto: " + soggetto + "]";
+    }
+    
+    @Override
+    
+    public boolean equals(Object obj) {
+        
+        if (this == obj) {
+            
+            return true;
+        }
+        
+        if (!(obj instanceof Fotografia)) {
             
             return false;
         }
-        return this.fotografie.removeIf(foto -> idFoto.equals(foto.getIdFoto()));
+        Fotografia other = (Fotografia) obj;
+        
+        return idFoto != null && idFoto.equals(other.idFoto);
     }
 
-    /**
-     * Cerca una fotografia per ID.
-     * @return la fotografia trovata oppure null se non esiste.
-     */
-
-    public Fotografia cercaFoto(String idFoto) {
-        
-        if (idFoto == null || idFoto.isEmpty()) {
-            
-            return null;
-        }
-        
-        for (Fotografia foto : fotografie) {
-            
-            if (idFoto.equals(foto.getIdFoto())) {
-                
-                return foto;
-            }
-        }
-        return null;
-    }
-
-    //getters
-    
-    public String getNomeArchivio() {
-        
-        return nomeArchivio;
-    }
-
-    public Responsabile getResponsabile() {
-        
-        return responsabile;
-    }
-    
-    public List<Fotografia> getFotografie() {
-        
-        return new ArrayList<>(fotografie); // restituisce una copia per sicurezza
-    }
-
-    
     @Override
-    public String toString() {
+    public int hashCode() {
         
-        return "Archivio: " + nomeArchivio + " (foto: " + fotografie.size() + ")" + ", Responsabile: " + responsabile;
+        return idFoto != null ? idFoto.hashCode() : 0;
     }
 }
 
 
-
-// this class represents an archive that contains photographs and is managed by a responsible person.
+// this class represents a photograph with its basic attributes.
