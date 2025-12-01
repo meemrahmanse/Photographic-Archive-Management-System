@@ -205,16 +205,16 @@ public class ProgettoArchivio {
             if (soggetto == null) {
                 System.out.println(">> Soggetto non trovato. Riprova.");
                 // Opzionale: permettere di uscire se non si trova il soggetto
-                System.out.print("Vuoi riprovare? (s/n): ");
-                if (scanner.nextLine().equalsIgnoreCase("n")) return;
+                System.out.print("Vuoi riprovare? (si/no): ");
+                if (scanner.nextLine().equalsIgnoreCase("no")) return;
             }
         }
 
-        System.out.print("La foto è a colori? (s/n): ");
+        System.out.print("La foto è a colori? (si/no): ");
         String aColori = scanner.nextLine();
 
         Fotografia nuovaFoto;
-        if (aColori.equalsIgnoreCase("s")) {
+        if (aColori.equalsIgnoreCase("si")) {
             String tipoStampa = leggiStringaNonVuota("Tipo di stampa (es. Chiaro/Opaco): ");
             // Nota: Assumo che FotoAColore accetti String per dimensione e stato come nel codice originale,
             // ma passo i valori validati.
@@ -317,3 +317,4 @@ public class ProgettoArchivio {
         return input;
     }
 }
+
