@@ -1,6 +1,6 @@
 
 // ProgettoArchivio.java - meem
-// Necessary package and imports
+
 package progettoarchivio;
 
 import java.util.Scanner;   // reads user input from the console
@@ -19,16 +19,9 @@ public class ProgettoArchivio {
     // main method - entry point of the program
     public static void main(String[] args) {
         // Dati di esempio
-        try {
-            
-            catalogoSoggetti.aggiungiSoggetto(new Personaggio("p1", "Mario Rossi", 'M', false, 1980));
-            catalogoSoggetti.aggiungiSoggetto(new Politico("p2", "Luigi Verdi", 'M', false, 1970, "Centro", "Ministro"));
-            catalogoSoggetti.aggiungiSoggetto(new Artista("p3", "Anna Bianchi", 'F', true, 1950, "Pittura"));
-            catalogoSoggetti.aggiungiSoggetto(new Luogo("l1", "Colosseo", "Anfiteatro romano a Roma"));
-            catalogoSoggetti.aggiungiSoggetto(new Oggetto("o1", "Vaso Ming", "Antico vaso cinese"));
-        } catch (IllegalArgumentException ignored) {  // exception handling
-            // Ignora se i dati di esempio esistono già
-        }
+        
+        caricaDatiEsesmpio();
+        
         int scelta = -1;
 
         // Main menu loop
@@ -36,7 +29,7 @@ public class ProgettoArchivio {
             System.out.println("\n--- MENU GESTIONE ARCHIVIO FOTOGRAFICO ---");
             System.out.println("1. Gestione Archivi");
             System.out.println("2. Gestione Fotografie");
-            System.out.println("3. Visualizza Catalogo Soggetti");
+            System.out.println("3. Gestione Soggetti");
             System.out.println("4. Salva ed esci");
             System.out.println("0. Esci senza salvare");
             System.out.print("Scelta: ");
@@ -56,16 +49,21 @@ public class ProgettoArchivio {
                         break;
                         
                     case 3:
-                        visualizzaCatalogo();   // display the subj catalog
+                        menuGestioneSoggetti();   // display the subj catalog
                         break;
                         
                     case 4:
+                        try{
                         gestore.salvaSuFile();   // save archives to files
+                        System.out.println("Dati salvati con successo, arrivederci!");
+                        }catch (Exception e){
+                            System.out.println("Errore nel salvataggio: " + e.getMessage());
+                        }
                         scelta = 0; // Per uscire dal ciclo
                         break;
                         
                     case 0:
-                        System.out.println("Uscita senza salvare.");
+                        System.out.println("Uscita senza salvare... Arrivederci!");
                         break;
                         
                     default:
@@ -73,18 +71,27 @@ public class ProgettoArchivio {
                         break;
                 }
             } catch (NumberFormatException e) {         // exception handling
-                System.out.println("Inserire un numero valido!");
+                System.out.println("Errore: inserire un numero valido!");
             }
         }
 
         scanner.close();  // this function closes the scanner to free up resources.
-        
-        System.out.println("Programma terminato.");
-        System.out.println("Arrivederci, grazie per aver usato il nostro programma!");
     }
-
-
-    // this is for managing achieves
+    
+    //dati esempio
+    private static void caricaDatiEsesmpio(){
+            try {
+            
+            catalogoSoggetti.aggiungiSoggetto(new Personaggio("p1", "Mario Rossi", 'M', false, 1980));
+            catalogoSoggetti.aggiungiSoggetto(new Politico("p2", "Luigi Verdi", 'M', false, 1970, "Centro", "Ministro"));
+            catalogoSoggetti.aggiungiSoggetto(new Artista("p3", "Anna Bianchi", 'F', true, 1950, "Pittura"));
+            catalogoSoggetti.aggiungiSoggetto(new Luogo("l1", "Colosseo", "Anfiteatro romano a Roma"));
+            catalogoSoggetti.aggiungiSoggetto(new Oggetto("o1", "Vaso Ming", "Antico vaso cinese"));
+        } catch (Exception ignored) {  // exception handling
+            // Ignora se i dati di esempio esistono già
+        }
+    }
+    // menu archivi
     private static void menuGestioneArchivi() {
         
         int scelta = -1;
@@ -96,8 +103,8 @@ public class ProgettoArchivio {
             System.out.println("2. Visualizza tutti gli archivi");
             System.out.println("0. Torna al menu principale");
             System.out.print("Scelta: ");
-            try {
-                
+            
+            try {   
                 scelta = Integer.parseInt(scanner.nextLine());
                 
                 switch (scelta) {
@@ -110,15 +117,10 @@ public class ProgettoArchivio {
                         visualizzaArchivi(); // call to display all archives
                         break;
                         
-                    case 0:
-                        break;
-                        
-                    default:
-                        System.out.println("Scelta non valida.");
                 }
             } catch (NumberFormatException e) {
                 
-                System.out.println("Inserire un numero valido.");
+                System.out.println("Inserisci un numero valido.");
             }
         }
     }
@@ -127,37 +129,37 @@ public class ProgettoArchivio {
     // this is for collecting info and adding a new archive
     private static void aggiungiArchivio() {
         
-        String nomeArchivio = String.valueOf(leggiSoloLettere(scanner, "Inserite il nome dell'archivio: "));
+        String nomeArchivio = leggiStringa("Nome archivio: ");
         
-        String nomeResp = String.valueOf(leggiSoloLettere(scanner, "Inserite il nome del responsabile: "));
+        String nomeResp = leggiNome("Inserite il nome del responsabile: ");
         
-        System.out.println("Indirizzo: ");
-        String indirizzo = scanner.nextLine();
+        String indirizzo = leggiStringa("Indirizzo: ");
         
-        String tel = String.valueOf(leggiNumInt(scanner, "Inserite il numero di telefono: "));
-   
-        String orario = String.valueOf(leggiNumInt(scanner, "Inserite i orari di apertura: "));
-
-        Responsabile resp = new Responsabile(nomeResp, indirizzo, tel, orario);
+        String telefono = leggiTelefono("Telefono: ");
+        
+        String orario = leggiStringa("Orario (es: 9-18): ");
+        
+        try{
+        Responsabile resp = new Responsabile(nomeResp, indirizzo, telefono, orario);
         Archivio archivio = new Archivio(nomeArchivio, resp);
         
         gestore.aggiungiArchivio(archivio);
         System.out.println("Archivio aggiunto con successo!");
+    }catch (Exception e){
+        System.out.println("Errore: " + e.getMessage());
     }
-
+}
     // display all existing archives
     private static void visualizzaArchivi() {
         
-        System.out.println("\n--- Elenco Archivi ---");
+        System.out.println("\n--- ELENCO ARCHIVI ---");
         
         if (gestore.getArchivi().isEmpty()) {
             
             System.out.println("Nessun archivio presente.");
             return;
         } 
-           for (Archivio a : gestore.getArchivi().values()) {
-            System.out.println("- " + a);
-    }
+        gestore.getArchivi().values().forEach(archivio -> System.out.println("- " + archivio));
 
   }
     // this for managing photographs
@@ -169,9 +171,9 @@ public class ProgettoArchivio {
         while (scelta != 0) {
             
             System.out.println("\n--- Gestione Fotografie ---");
-            System.out.println("1. Aggiungi una fotografia");
-            System.out.println("2. Cerca una fotografia");
-            System.out.println("3. Visualizza foto di un archivio");
+            System.out.println("1. Aggiungi fotografia");
+            System.out.println("2. Cerca fotografia");
+            System.out.println("3. Visualizza foto archivio");
             System.out.println("0. Torna al menu principale");
             System.out.print("Scelta: ");
             
@@ -191,16 +193,10 @@ public class ProgettoArchivio {
                     case 3:
                         visualizzaFotoArchivio();  // call to display photos of an archive
                         break;
-                        
-                    case 0:
-                        break;
-                        
-                    default:
-                        System.out.println("Scelta non valida!");
                 }
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 
-                System.out.println("Inserite un numero valido!");
+                System.out.println("Errore: inserite un numero valido!");
             }
         }
     }
@@ -214,12 +210,11 @@ public class ProgettoArchivio {
         
         if (gestore.getArchivi().isEmpty()) {
             
-            System.out.println("Nessun archivio presente. Creane uno prima di aggiungere una foto.");
+            System.out.println("Nessun archivio presente. Creane uno prima!");
             return;
         }
         
-        System.out.print("Seleziona il nome dell'archivio in cui aggiungere la foto: ");
-        String nomeArchivio = scanner.nextLine();
+        String nomeArchivio = leggiStringa("Nome archivio: ");
         Archivio archivio = gestore.getArchivio(nomeArchivio);
 
         if (archivio == null) {
@@ -228,86 +223,56 @@ public class ProgettoArchivio {
             return;
         }
 
-        System.out.print("ID Foto: ");
-        String idFoto = scanner.nextLine();
+        String idFoto = leggiStringa("ID foto: ");
         
-        int altezza = leggiNumInt(scanner, "Altezza della foto: ");
-        int larghezza = leggiNumInt(scanner, "Larghezza della foto: ");
+        int altezza = leggiIntero("Altezza: ");
+        int larghezza = leggiIntero("Larghezza: ");
         
-        if (altezza <= 0 || larghezza <= 0) {
-    System.out.println("Dimensioni non valide: inserire solo interi positivi.");
-    return;
-}
+        StatoConservazione stato = leggiStato();
          
-        
-StatoConservazione statoEnum = null;
-
-      do{ 
-      
-        System.out.print("Stato di conservazione (Buono, Danneggiato, pessimo, restaurato): ");
-        String stato = scanner.nextLine();
-
-        
-        try {
-            
-            statoEnum = StatoConservazione.fromString(stato);
-            
-        } catch (Exception e) {
-            
-            System.out.println("Valore non valido per stato di conservazione. Usa Buono / Danneggiato / Pessimo / Restaurato");
-            statoEnum = null;
-        }
-}while (statoEnum == null);
-        
         
       visualizzaCatalogo();
       
       Soggetto soggetto = null;
 
-      do {
-        System.out.print("Inserisci la chiave del soggetto da associare: ");
-        String chiaveSoggetto = scanner.nextLine();
+      while (soggetto == null){
+        String chiaveSoggetto = leggiStringa("Chiave soggetto: ");
+        soggetto = catalogoSoggetti.trovaPerChiave(chiaveSoggetto);
         
-        try {
-            
-            soggetto = catalogoSoggetti.trovaPerChiave(chiaveSoggetto);
-            
-        }catch (Exception e){
-            
-            System.out.println("Valore non valido, per favore inserisca una delle chiavi proposte nel catalogo soggetti!");
-            
-            soggetto = null;
+        if (soggetto == null){
+            System.out.println("Soggetto non trovato!");
         }
-      }while (soggetto == null);
 
         // ask if the photo is in color
         
-        System.out.print("La foto è a colori? (s/n): ");
-        String aColori = scanner.nextLine();
+        String colori = leggiStringa("La foto è a colori? (s/n): ");
         
         Fotografia nuovaFoto;
         
-        if (aColori.equalsIgnoreCase("s")) {
+        if (colori.equalsIgnoreCase("s")) {
             
             System.out.print("Tipo di stampa (Chiaro/Opaco): ");
-            String tipoStampa = scanner.nextLine();
             
-            nuovaFoto = new FotoAColore(idFoto, altezza, larghezza, statoEnum, soggetto, tipoStampa);
+            nuovaFoto = new FotoAColore(idFoto, altezza, larghezza, stato, soggetto, colori);
         
         } else {
             
-            nuovaFoto = new Fotografia(idFoto, altezza, larghezza, statoEnum, soggetto);
+            nuovaFoto = new Fotografia(idFoto, altezza, larghezza, stato, soggetto);
         }
 
-        archivio.aggiungiFoto(nuovaFoto);
-        System.out.println("Fotografia aggiunta con successo all'archivio " + nomeArchivio);
-      }
-
+        try {
+            archivio.aggiungiFoto(nuovaFoto);
+            System.out.println("Foto aggiunta!");
+        } catch (Exception e) {
+            System.out.println("Errore aggiunta foto: " + e.getMessage());
+        }
+    }
+    }
 
 
     private static void cercaFotografia() {
-        System.out.print("Inserisci l'ID della fotografia da cercare: ");
-        String idFoto = scanner.nextLine();
+        
+        String idFoto = leggiStringa("ID foto da cercare: ");
 
 
         for (Archivio archivio : gestore.getArchivi().values()) {
@@ -321,7 +286,7 @@ StatoConservazione statoEnum = null;
             }
         }
 
-        System.out.println("Nessuna foto trovata con l'ID: " + idFoto);
+        System.out.println("Foto non trovata!");
     }
     
 
@@ -329,29 +294,24 @@ StatoConservazione statoEnum = null;
     // show photos of a selected archive
     private static void visualizzaFotoArchivio() {
         visualizzaArchivi();
-        
-        System.out.print("Nome archivio: ");
-        String nomeArchivio = scanner.nextLine();
+
+        String nomeArchivio = leggiStringa("Nome archivio: ");
         
         Archivio archivio = gestore.getArchivio(nomeArchivio);
+       
         if (archivio == null) {
             
             System.out.println("Archivio non trovato.");
             return;
         }
-
-        System.out.println("\n--- Fotografie nell'archivio: " + nomeArchivio + " ---");
         
-        if(archivio.getFotografie().isEmpty()){
+        if (archivio.getFotografie().isEmpty()) {
             
-            System.out.println("Nessuna fotografia in questo archivio.");
+            System.out.println("Nessuna foto.");
             return;
-        } 
-            for(Fotografia f : archivio.getFotografie()){
-                System.out.println("- " + f);
-            }
+        }
+         archivio.getFotografie().forEach(f -> System.out.println("- " + f));
     }
-
     // display the subject catalog
     private static void visualizzaCatalogo() {
         
@@ -362,57 +322,162 @@ StatoConservazione statoEnum = null;
             System.out.println("Il catalogo è vuoto.");
             return;
         } 
-         for (Soggetto s : catalogoSoggetti.tuttiSoggetti()) {
-            System.out.println("- " + s);
+         catalogoSoggetti.tuttiSoggetti().forEach(s -> System.out.println("- " + s));
+    }
+
+    private static void menuGestioneSoggetti() {
+        int scelta = -1;
+
+        while (scelta != 0) {
+            System.out.println("\n=== GESTIONE SOGGETTI ===");
+            System.out.println("1. Visualizza catalogo");
+            System.out.println("2. Aggiungi nuovo soggetto");
+            System.out.println("0. Indietro");
+            System.out.print("Scelta: ");
+
+            try {
+                scelta = Integer.parseInt(scanner.nextLine());
+                switch (scelta) {
+                    case 1 -> visualizzaCatalogo();
+                    case 2 -> aggiungiSoggetto();
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Errore: numero non valido.");
+            }
         }
     }
 
+    private static void aggiungiSoggetto() {
 
-//exceptio solo numeri
-private static int leggiNumInt(Scanner input, String messaggio) {
-    
-    int numero = 0;
-    boolean valido = false;
+        System.out.println("\nTipi soggetto:");
+        System.out.println("1. Personaggio");
+        System.out.println("2. Politico");
+        System.out.println("3. Artista");
+        System.out.println("4. Luogo");
+        System.out.println("5. Oggetto");
 
-    while (!valido) {
-        
-        System.out.print(messaggio);
-        String valore = input.nextLine().trim();
+        int tipo = leggiIntero("Scelta: ");
 
-        if (valore.isEmpty()) continue;
+        String id = leggiStringa("ID soggetto: ");
+        String nome = leggiNome("Nome: ");
+
+        Soggetto nuovo = null;
+
+        switch (tipo) {
+            case 1 -> {
+                char sesso = leggiChar("Sesso (M/F): ");
+                boolean vivente = leggiBoolean("Vivente? (s/n): ");
+                int anno = leggiIntero("Anno nascita: ");
+                nuovo = new Personaggio(id, nome, sesso, vivente, anno);
+            }
+            case 2 -> {
+                char sesso = leggiChar("Sesso (M/F): ");
+                boolean vivente = leggiBoolean("Vivente? (s/n): ");
+                int anno = leggiIntero("Anno nascita: ");
+                String partito = leggiStringa("Partito politico: ");
+                String carica = leggiStringa("Carica istituzionale: ");
+                nuovo = new Politico(id, nome, sesso, vivente, anno, partito, carica);
+            }
+            case 3 -> {
+                char sesso = leggiChar("Sesso (M/F): ");
+                boolean vivente = leggiBoolean("Vivente? (s/n): ");
+                int anno = leggiIntero("Anno nascita: ");
+                String arte = leggiStringa("Disciplina artistica: ");
+                nuovo = new Artista(id, nome, sesso, vivente, anno, arte);
+            }
+            case 4 -> {
+                String descr = leggiStringa("Descrizione luogo: ");
+                nuovo = new Luogo(id, nome, descr);
+            }
+            case 5 -> {
+                String descr = leggiStringa("Descrizione oggetto: ");
+                nuovo = new Oggetto(id, nome, descr);
+            }
+            default -> {
+                System.out.println("Tipo non valido.");
+                return;
+            }
+        }
 
         try {
-            
-            numero = Integer.parseInt(valore);
-            valido = true;
-            
-        } catch (NumberFormatException e) {
-            
-            System.out.println("\nErrore: inserire solo numeri interi.\n");
+            catalogoSoggetti.aggiungiSoggetto(nuovo);
+            System.out.println("Soggetto aggiunto!");
+        } catch (Exception e) {
+            System.out.println("Errore: " + e.getMessage());
         }
     }
 
-    return numero;
-}
-//exception solo lettere
-private static boolean soloLettere(String s) {
+//exceptions
     
-    return s != null && s.matches("[a-zA-Z]+");
-}
-private static String leggiSoloLettere(Scanner scanner, String messaggio) {
+private static String leggiStringa(String msg) {
+        String s;
+        do {
+            System.out.print(msg);
+            s = scanner.nextLine().trim();
+        } while (s.isEmpty());
+        return s;
+    }
     
-    String input;
-    
-    do {
-        System.out.print(messaggio);
-        input = scanner.nextLine();
-        
-        if (!soloLettere(input)) {
-            
-            System.out.println("Errore: inserire solo lettere.");
+private static int leggiIntero(String msg) {
+        while (true) {
+            try {
+                System.out.print(msg);
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Inserire solo numeri interi.");
+            }
         }
-    } while (!soloLettere(input));
-    return input;
+    }
+ private static String leggiNome(String msg) {
+        String s;
+        do {
+            System.out.print(msg);
+            s = scanner.nextLine().trim();
+            if (!s.matches("[A-Za-zÀ-ÖØ-öø-ÿ' ]+"))
+                System.out.println("Errore: usare solo lettere, spazi, apostrofi.");
+        } while (!s.matches("[A-Za-zÀ-ÖØ-öø-ÿ' ]+"));
+        return s;
+    }
+
+    private static String leggiTelefono(String msg) {
+        String tel;
+        do {
+            System.out.print(msg);
+            tel = scanner.nextLine().trim();
+            if (!tel.matches("[0-9+ ]{5,20}"))
+                System.out.println("Telefono non valido.");
+        } while (!tel.matches("[0-9+ ]{5,20}"));
+        return tel;
+    }
+
+    private static char leggiChar(String msg) {
+        while (true) {
+            System.out.print(msg);
+            String s = scanner.nextLine().trim();
+            if (s.length() == 1) return s.charAt(0);
+            System.out.println("Inserisci un solo carattere.");
+        }
+    }
+
+    private static boolean leggiBoolean(String msg) {
+        while (true) {
+            System.out.print(msg);
+            String s = scanner.nextLine().trim().toLowerCase();
+            if (s.equals("s")) return true;
+            if (s.equals("n")) return false;
+            System.out.println("Rispondere s / n");
+        }
+    }
+
+    private static StatoConservazione leggiStato() {
+        while (true) {
+            String s = leggiStringa("Stato (Buono/Danneggiato/Pessimo/Restaurato): ");
+            try {
+                return StatoConservazione.fromString(s);
+            } catch (Exception e) {
+                System.out.println("Valore non valido.");
+            }
+        }
+    }
+
 }
-}
-// this is our main class that runs the photographic archive management system, providing a console menu for users to manage archives and photographs.
