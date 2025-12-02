@@ -16,7 +16,7 @@ public class FotoAColore extends Fotografia {
     public FotoAColore(String idFoto, int altezza, int larghezza, StatoConservazione stato, Soggetto soggetto, String tipoStampa) {
 
         super(idFoto, altezza, larghezza, stato, soggetto);
-        this.tipoStampa = tipoStampa != null ? tipoStampa.trim() : "";
+        setTipoStampa(tipoStampa);
 
     }
 
@@ -24,7 +24,7 @@ public class FotoAColore extends Fotografia {
     public FotoAColore() {
     
     super();
-    this.tipoStampa = "";
+    this.tipoStampa = "chiaro";
     }
 
 
@@ -37,7 +37,18 @@ public class FotoAColore extends Fotografia {
 
     public void setTipoStampa(String tipoStampa) {
         
-        this.tipoStampa = tipoStampa != null ? tipoStampa.trim() : "";
+          if (tipoStampa == null || tipoStampa.trim().isEmpty()) {
+            throw new IllegalArgumentException("Il tipo di stampa non può essere vuoto!");
+        }
+
+        String valore = tipoStampa.trim().toLowerCase();
+
+        if (!valore.equals("chiaro") && !valore.equals("opaco")) {
+            
+            throw new IllegalArgumentException("Tipo di stampa non valido: '" + tipoStampa +"'. Valori ammessi: chiaro, opaco");
+        }
+
+        this.tipoStampa = valore;
     }
 
     
