@@ -59,14 +59,14 @@ public class Artista extends Personaggio {
         
         this.tipoAttivita = tipo;
         this.attivitaCustom = null;
-        this.descrizioneAttivita = "";
+        this.descrizioneAttivita = tipo.getLabel();
     }
     
     public Artista (){
             
         this.tipoAttivita = AttivitaPrevalente.ALTRO;
-        this.attivitaCustom = null;
-        this.descrizioneAttivita = null;
+        this.attivitaCustom = "";
+        this.descrizioneAttivita = "";
 
     }
 /**
