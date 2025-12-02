@@ -15,25 +15,27 @@ import java.util.Objects;
 public class Fotografia {
 
     private String idFoto;
-    private int dimensione;
+    private int altezza;
+    private int larghezza;
     private StatoConservazione statoConservazione;
     private Soggetto soggetto;
 
     // costruttore principale
-    public Fotografia(String idFoto, int dimensione, StatoConservazione statoConservazione, Soggetto soggetto) {
+    public Fotografia(String idFoto, int altezza, int larghezza, StatoConservazione statoConservazione, Soggetto soggetto) {
 
         if (idFoto == null || idFoto.trim().isEmpty()) {
             
             throw new IllegalArgumentException("ID foto non valido!");
         }
         
-        if (dimensione <= 0) {
+        if (altezza <= 0 || larghezza <= 0) {
             
             throw new IllegalArgumentException("La dimensione deve essere positiva!");
         }
         
         this.idFoto = idFoto.trim();
-        this.dimensione = dimensione;
+        this.altezza = altezza;
+        this.larghezza = larghezza;
         this.statoConservazione = Objects.requireNonNull(statoConservazione, "Il stato di conservazione non puo essere vuoto!");
         this.soggetto = soggetto;
     }
@@ -59,22 +61,33 @@ public class Fotografia {
     }
 
 
-    public int getDimensione() {
+    public int getAltezza() {
         
-        return dimensione;
+        return altezza;
     }
 
-
-    public void setDimensione(int dimensione) {
+    public int getLarghezza(){
         
-        if (dimensione <= 0) {
+        return larghezza;
+    }
+
+    public void setAltezza(int altezza) {
+        
+        if (altezza <= 0) {
             
             throw new IllegalArgumentException("La dimensione deve essere positiva!");
         }
-        this.dimensione = dimensione;
+        this.altezza = altezza;
     }
 
-
+    public void setLarghezza(int larghezza) {
+        
+        if (larghezza <= 0) {
+            
+            throw new IllegalArgumentException("La dimensione deve essere positiva!");
+        }
+        this.larghezza = larghezza;
+    }
     public StatoConservazione getStatoConservazione() {
         
         return statoConservazione;
@@ -116,7 +129,7 @@ public class Fotografia {
     @Override
     
     public String toString() {
-        return "Fotografia [ID: " + idFoto + ", Dimensione: " + dimensione + ", Stato: " + statoConservazione + ", Soggetto: " + soggetto + "]";
+        return "Fotografia [ID: " + idFoto + ", Dimensione: " + altezza + " x " + larghezza + ", Stato: " + statoConservazione + ", Soggetto: " + soggetto + "]";
     }
     
     @Override
