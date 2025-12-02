@@ -22,7 +22,7 @@ public enum AttivitaPrevalente {
             
             return ALTRO;
         }
-        String str = s.trim();
+        String str = s.trim().toLowerCase();
         
         for (AttivitaPrevalente a : values()) {
             
@@ -33,4 +33,12 @@ public enum AttivitaPrevalente {
         }
         return ALTRO;
     }
+    
+    @Override
+    
+    public String toString() {
+        
+    return label;
 }
+}
+
