@@ -20,7 +20,7 @@ public class GestoreArchivi {
 
     private static volatile GestoreArchivi instance; //thread-safe singleton
     private Map<String, Archivio> archivi;
-    private final String NOME_FILE = "archivio.json";
+    private static final String NOME_FILE = "archivio.json";
 
 //costruttore privato
 private GestoreArchivi() {
@@ -32,11 +32,15 @@ private GestoreArchivi() {
 /**
 * Restituisce l'istanza unica del gestore.
 */
-    public static synchronized GestoreArchivi getInstance() {
+    public static GestoreArchivi getInstance() {
         
         if (instance == null) {
             
-            instance = new GestoreArchivi();
+            synchronized (GestoreArchivi.class) {
+                if (instance == null){
+                    instance = new GestoreArchivi();
+                }
+            }
         }
         return instance;
     }
@@ -52,7 +56,14 @@ private GestoreArchivi() {
             
             throw new IllegalArgumentException("Archivio non valido: nome mancante o archivio nullo!");
         }
-        archivi.put(archivio.getNomeArchivio(), archivio);
+        
+        String nome = archivio.getNomeArchivio().trim();
+        
+    if (archivi.containsKey(nome)) {
+            throw new IllegalArgumentException("Esiste già un archivio chiamato: " + nome);
+        }
+
+        archivi.put(nome, archivio);
         salvaSuFile();
     }
 
@@ -64,6 +75,10 @@ private GestoreArchivi() {
     if (nomeArchivio == null || nomeArchivio.isEmpty()) {
         
             throw new IllegalArgumentException("Nome archivio non valido!");
+        }
+    
+    if (!archivi.containsKey(nomeArchivio)) {
+            throw new IllegalArgumentException("Archivio '" + nomeArchivio + "' non esiste!");
         }
     
         archivi.remove(nomeArchivio);
@@ -80,6 +95,11 @@ public void modificaArchivio(String nomeArchivio, Archivio archivioModificato) {
         
             throw new IllegalArgumentException("Parametri non validi per la modifica dell'archivio.");
         }
+    
+    if (!archivi.containsKey(nomeArchivio)) {
+            throw new IllegalArgumentException("Impossibile modificare: l’archivio '" + nomeArchivio + "' non esiste.");
+        }
+    
     archivi.put(nomeArchivio, archivioModificato);
     salvaSuFile();
 }
@@ -89,6 +109,10 @@ public void modificaArchivio(String nomeArchivio, Archivio archivioModificato) {
 
 public Archivio getArchivio(String nomeArchivio) {
     
+        if (nomeArchivio == null || nomeArchivio.trim().isEmpty()) {
+            
+            throw new IllegalArgumentException("Nome archivio non valido!");
+        }
         return archivi.get(nomeArchivio);
 }
 
@@ -116,7 +140,7 @@ public void salvaSuFile() {
         System.out.println("Dati salvati con successo su " + NOME_FILE);
     } catch (IOException e) {
         
-        System.err.println("Errore durante il salvataggio JSON: " + e.getMessage());
+        System.err.println("Errore: salvataggio JSON fallito: " + e.getMessage());
     }
 }
 
@@ -138,17 +162,23 @@ public void salvaSuFile() {
         Gson gson = new Gson();
         Type tipo = new TypeToken<HashMap<String, Archivio>>() {}.getType();
         
-        archivi = gson.fromJson(reader, tipo);
+        Map<String, Archivio> caricati = gson.fromJson(reader, tipo);
         
-        if (archivi == null){
+        if (caricati == null){
             
-            archivi = new HashMap<>();
+            throw new IOException("Il file JSON è corrotto o vuoto!");
         }
+        
+        archivi = caricati;
         System.out.println("Dati caricati con successo da " + NOME_FILE);
     
     } catch (Exception e) {
         
-        System.err.println("Errore durante il caricamento JSON: " + e.getMessage());
+        System.err.println("[ERRORE] Lettura JSON fallita: " + e.getMessage());
+        System.err.println("[ATTENZIONE] Creazione nuovo archivio + backup del file corrotto.");
+
+            // Backup del file danneggiato
+        file.renameTo(new File("archivio_corrotto_backup.json"));
         archivi = new HashMap<>();
         
         }
