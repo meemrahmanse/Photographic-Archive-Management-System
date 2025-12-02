@@ -7,6 +7,12 @@ import java.util.Objects;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+
+/**
+ * Rappresenta un archivio fotografico gestito da un Responsabile.
+ * Contiene fotografie identificate univocamente tramite ID.
+ */
 
 public class Archivio {
 
@@ -16,8 +22,12 @@ public class Archivio {
 
 //costruttore principale
 public Archivio(String nomeArchivio, Responsabile responsabile) {
-
-        this.nomeArchivio = Objects.requireNonNull(nomeArchivio, "Il nome dell'archivio non può essere vuoto!");
+        
+        if (nomeArchivio == null || nomeArchivio.trim().isEmpty()) {
+            
+            throw new IllegalArgumentException("Il nome dell'archivio non può essere vuoto!");
+        }
+        this.nomeArchivio = nomeArchivio.trim();
         this.responsabile = Objects.requireNonNull(responsabile, "Il responsabile non può essere vuoto!");
         this.fotografie = new HashMap<>();
 }
@@ -36,18 +46,24 @@ public Archivio() {
 
 public void aggiungiFoto(Fotografia foto) {
     
-    if (foto == null || foto.getIdFoto() == null || foto.getIdFoto().isEmpty()){
+    if (foto == null){
         
-        throw new IllegalArgumentException("La fotografia deve avere un ID valido!");
+        throw new IllegalArgumentException("La fotografia non può essere vuota!");
     }
 
-    if (fotografie.containsKey(foto.getIdFoto())) {
+    String id = foto.getIdFoto();
+    
+    if (id == null || id.trim().isEmpty()) {
+        
+            throw new IllegalArgumentException("La fotografia deve avere un ID valido!");
+        }
+    id = id.trim();
+    
+    if (fotografie.containsKey(id)) {
         
         throw new IllegalArgumentException("La fotografia con ID ' " + foto.getIdFoto() + "' esiste gia!");
     }
-
-
-    fotografie.put(foto.getIdFoto(), foto);
+    fotografie.put(id, foto);
 }
 
     /**
@@ -55,9 +71,20 @@ public void aggiungiFoto(Fotografia foto) {
      * @return true se la foto è stata rimossa, false se non trovata.
      */
 
-    public boolean rimuoviFoto(String idFoto) {
+    public Fotografia rimuoviFoto(String idFoto) {
         
-        return fotografie.remove(idFoto) != null;
+        if (idFoto == null || idFoto.trim().isEmpty()) {
+            throw new IllegalArgumentException("L'ID della fotografia non può essere vuoto!");
+        }
+
+        Fotografia rimossa = fotografie.remove(idFoto.trim());
+
+        if (rimossa == null) {
+            
+            throw new IllegalArgumentException("Nessuna fotografia trovata con ID '" + idFoto + "'!");
+        }
+
+        return rimossa;
     }
 
     /**
@@ -67,7 +94,11 @@ public void aggiungiFoto(Fotografia foto) {
 
     public Fotografia cercaFoto(String idFoto) {
         
-        return fotografie.get(idFoto);
+        if (idFoto == null) {
+            
+            return null;
+        }
+        return fotografie.get(idFoto.trim());
     }
     //getters
     
@@ -83,7 +114,7 @@ public void aggiungiFoto(Fotografia foto) {
     
     public List<Fotografia> getFotografie() {
         
-        return new ArrayList<>(fotografie.values()); // restituisce una copia per sicurezza
+        return Collections.unmodifiableList(new ArrayList<>(fotografie.values())); // restituisce una copia per sicurezza
     }
 
     
