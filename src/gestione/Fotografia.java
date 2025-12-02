@@ -23,25 +23,22 @@ public class Fotografia {
     // costruttore principale
     public Fotografia(String idFoto, int altezza, int larghezza, StatoConservazione statoConservazione, Soggetto soggetto) {
 
-        if (idFoto == null || idFoto.trim().isEmpty()) {
-            
-            throw new IllegalArgumentException("ID foto non valido!");
-        }
-        
-        if (altezza <= 0 || larghezza <= 0) {
-            
-            throw new IllegalArgumentException("La dimensione deve essere positiva!");
-        }
-        
-        this.idFoto = idFoto.trim();
-        this.altezza = altezza;
-        this.larghezza = larghezza;
-        this.statoConservazione = Objects.requireNonNull(statoConservazione, "Il stato di conservazione non puo essere vuoto!");
-        this.soggetto = soggetto;
+        setIdFoto(idFoto);
+        setAltezza(altezza);
+        setLarghezza(larghezza);
+        this.statoConservazione = Objects.requireNonNull(statoConservazione,"Lo stato di conservazione non può essere nullo!");
+        this.soggetto = Objects.requireNonNull(soggetto,"Il soggetto non può essere nullo!");
     }
 
     //costruttore vuoto
-    public Fotografia() {}
+    public Fotografia() {
+    
+        this.idFoto = "";
+        this.altezza = 0;
+        this.larghezza = 0;
+        this.statoConservazione = StatoConservazione.BUONO; // default 
+        this.soggetto = null; 
+    }
 
     //getter & setter
     
@@ -75,7 +72,7 @@ public class Fotografia {
         
         if (altezza <= 0) {
             
-            throw new IllegalArgumentException("La dimensione deve essere positiva!");
+            throw new IllegalArgumentException("L' deve essere positiva!");
         }
         this.altezza = altezza;
     }
@@ -84,17 +81,19 @@ public class Fotografia {
         
         if (larghezza <= 0) {
             
-            throw new IllegalArgumentException("La dimensione deve essere positiva!");
+            throw new IllegalArgumentException("La larghezza deve essere positiva!");
         }
         this.larghezza = larghezza;
     }
+    
     public StatoConservazione getStatoConservazione() {
         
         return statoConservazione;
     }
 
     /**
-     * Setter con conversione da String → enum.
+     * Imposta lo stato di conservazione da stringa (conversione automatica).
+     * Accetta valori come: "buono", "danneggiato", "pessimo", "restaurato".
      */
     
     public void setStatoConservazione(String statoConservazione) {
@@ -108,20 +107,23 @@ public class Fotografia {
         this.statoConservazione = StatoConservazione.valueOf(statoConservazione.trim(). toUpperCase());
     } catch (IllegalArgumentException e) {
         
-        throw new IllegalArgumentException("Valore non riconosciuto per stato di conservazione: " + statoConservazione);
+        throw new IllegalArgumentException("Valore non riconosciuto: " + statoConservazione + ". Valori ammessi: BUONO, DANNEGGIATO, PESSIMO, RESTAURATO.");
     }
 }
 
-
+        public void setStatoConservazione(StatoConservazione statoConservazione) {
+            
+        this.statoConservazione = Objects.requireNonNull(statoConservazione,"Lo stato di conservazione non può essere nullo!");
+    }
 
     public Soggetto getSoggetto() {
         
-        return this.soggetto;
+        return soggetto;
     }
 
 
     public void setSoggetto(Soggetto soggetto) {
-        this.soggetto = soggetto;
+        this.soggetto = Objects.requireNonNull(soggetto,"Il soggetto non può essere nullo!");
     }
 
     
@@ -129,7 +131,7 @@ public class Fotografia {
     @Override
     
     public String toString() {
-        return "Fotografia [ID: " + idFoto + ", Dimensione: " + altezza + " x " + larghezza + ", Stato: " + statoConservazione + ", Soggetto: " + soggetto + "]";
+        return "Fotografia [ID: " + idFoto + ", Dimensione: " + altezza + " x " + larghezza + ", Stato: " + statoConservazione + ", Soggetto: " + (soggetto != null ? soggetto : "N/D") + "]";
     }
     
     @Override
