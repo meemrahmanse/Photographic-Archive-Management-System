@@ -13,9 +13,9 @@ public class FotoAColore extends Fotografia {
     
   // costruttore principale che delega al costruttore di Fotografia
     
-    public FotoAColore(String idFoto, String dimensione, String statoConservazione, Soggetto soggetto, String tipoStampa) {
+    public FotoAColore(String idFoto, int altezza, int larghezza, StatoConservazione stato, Soggetto soggetto, String tipoStampa) {
 
-        super(idFoto, Integer.parseInt(dimensione), StatoConservazione.valueOf(statoConservazione.toUpperCase()), soggetto);
+        super(idFoto, altezza, larghezza, stato, soggetto);
         this.tipoStampa = tipoStampa != null ? tipoStampa.trim() : "";
 
     }
