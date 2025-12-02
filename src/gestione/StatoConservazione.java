@@ -2,10 +2,10 @@ package progettoarchivio;
 
 public enum StatoConservazione {
 
-    OTTIMO,
     BUONO,
-    DISCRETO,
-    SCARSO;
+    DANEGGIATO,
+    PESSIMO,
+    RESTAURATO;
 
     /**
      * Accetta: "OTTIMO", "BUONO", "DISCRETO", "SCARSO"
@@ -14,29 +14,22 @@ public enum StatoConservazione {
      * @throws IllegalArgumentException se non valido
      */
     public static StatoConservazione fromString(String s) {
-
         if (s == null || s.trim().isEmpty()) {
-            throw new IllegalArgumentException("Inserire uno stato di conservazione valido!");
-        }
-
-        return switch (s.trim().toUpperCase()) {
-            case "OTTIMO"   -> OTTIMO;
-            case "BUONO"    -> BUONO;
-            case "DISCRETO" -> DISCRETO;
-            case "SCARSO"   -> SCARSO;
-
-            default -> throw new IllegalArgumentException("Stato di conservazione non valido: '%s'. Valori ammessi: BUONO, DANEGGIATO, PESSIMO, RESTAURATO.".formatted(s));
-        };
+            
+            throw new IllegalArgumentException("Inserire uno stato di conservazione!");
     }
 
-    /**
-     * Override per una rappresentazione leggibile.
-     * charAt0 prende la prima lettera al maiuscolo e tutte le altre invece al minuscolo
-     */
-    @Override
-    
-    public String toString() {
+    String upper = s.trim().toUpperCase();
+
+    return switch (upper) {
         
-        return name().charAt(0) + name().substring(1).toLowerCase();
-    }
+        case "BUONO" -> BUONO;
+        case "DANEGGIATO" -> DANEGGIATO;
+        case "PESSIMO" -> PESSIMO;
+        case "RESTAURATO" -> RESTAURATO;
+
+        default -> throw new IllegalArgumentException("Valore non valido: '" + s + "'. I valori ammessi sono: buono, daneggiato, pessimo, restaurato."
+        );
+    };
+}
 }
