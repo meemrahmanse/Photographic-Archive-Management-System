@@ -4,7 +4,7 @@
 package progettoarchivio;
 
 import java.util.Scanner;   // reads user input from the console
-
+import gestione.*; 
 
 
 // main program class 
@@ -194,9 +194,10 @@ public class ProgettoArchivio {
                         visualizzaFotoArchivio();  // call to display photos of an archive
                         break;
                 }
-            } catch (Exception e) {
-                
+            } catch (NumberFormatException e) {
                 System.out.println("Errore: inserite un numero valido!");
+            } catch (Exception e) {
+                System.out.println("Errore: " + e.getMessage());
             }
         }
     }
@@ -242,18 +243,19 @@ public class ProgettoArchivio {
         if (soggetto == null){
             System.out.println("Soggetto non trovato!");
         }
+      }
 
         // ask if the photo is in color
         
-        String colori = leggiStringa("La foto è a colori? (s/n): ");
+        String colori = leggiStringa("La foto è a colori? (sì/no): ");
         
         Fotografia nuovaFoto;
         
-        if (colori.equalsIgnoreCase("s")) {
+        if (colori.equalsIgnoreCase("sì")) {
             
-            System.out.print("Tipo di stampa (Chiaro/Opaco): ");
+            String tipoStampa = leggiStringa("Tipo di stampa (Chiaro/Opaco): ");
             
-            nuovaFoto = new FotoAColore(idFoto, altezza, larghezza, stato, soggetto, colori);
+            nuovaFoto = new FotoAColore(idFoto, altezza, larghezza, stato, soggetto, tipoStampa);
         
         } else {
             
@@ -266,7 +268,6 @@ public class ProgettoArchivio {
         } catch (Exception e) {
             System.out.println("Errore aggiunta foto: " + e.getMessage());
         }
-    }
     }
 
 
