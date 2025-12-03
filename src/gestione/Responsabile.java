@@ -1,6 +1,6 @@
 // Responsabile.java - meem
 
-package progettoarchivio;
+package gestione;
 
 import java.util.Objects;
 // this class represents a responsible person managing an archive with their context details.
@@ -40,9 +40,41 @@ public class Responsabile {
         return telefono.matches("^[0-9+\\-\\s]{5,20}$"); // numeri, +, -, spazi
     }
 
-    private boolean isValidOrario(String orario) {
+    private String normalizeTime(String time) {
+        time = time.replace('.', ':');
+        String[] tParts = time.split(":");
         
-        return orario.matches("^[0-9]{1,2}:[0-9]{2}\\s*-\\s*[0-9]{1,2}:[0-9]{2}$");
+        int h, m = 0;
+        
+        try {
+            h = Integer.parseInt(tParts[0].trim());
+            if (tParts.length > 1) {
+                m = Integer.parseInt(tParts[1].trim());
+            }
+        } catch (NumberFormatException e) {
+             throw new IllegalArgumentException("Orario contiene caratteri non validi.");
+        }
+
+        if (h < 0 || h > 23) throw new IllegalArgumentException("Ore non valide (0-23): " + h);
+        if (m < 0 || m > 59) throw new IllegalArgumentException("Minuti non validi (0-59): " + m);
+
+        return String.format("%02d:%02d", h, m);
+    }
+
+    private String formatAndValidateOrario(String orario) {
+        String[] parts = orario.split("-");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Formato non valido. Usa 'Inizio - Fine'.");
+        }
+
+        String start = normalizeTime(parts[0].trim());
+        String end = normalizeTime(parts[1].trim());
+
+        if (start.compareTo(end) >= 0) {
+             throw new IllegalArgumentException("L'orario di chiusura deve essere successivo all'apertura.");
+        }
+
+        return start + " - " + end;
     }
         // Getters and Setters
     public String getNome() {
@@ -103,11 +135,7 @@ public class Responsabile {
     public void setOrarioApertura(String orarioApertura) {
         
         requireNonEmpty(orarioApertura, "Orario di apertura: ");
-        if (!isValidOrario(orarioApertura)) {
-            
-            throw new IllegalArgumentException("Orario non valido! Formato richiesto: HH:MM - HH:MM (es. 09:00 - 17:30)");
-        }
-        this.orarioApertura = orarioApertura.trim();
+        this.orarioApertura = formatAndValidateOrario(orarioApertura);
     }
 
     
