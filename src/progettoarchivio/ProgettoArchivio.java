@@ -4,29 +4,30 @@
 package progettoarchivio;
 
 import java.util.Scanner;   // reads user input from the console
-import gestione.*; 
+import gestione.*;           // import all class from gestione package
 
 
 // main program class 
 public class ProgettoArchivio {
 
-    // gestorarchivi instance for managing archives, catalogosoggetti instance for managing subjects, and scanner for user input
+    //These are our "Backend Managers." They hold the actual data. We make them static so the whole main program shares the same single copy of the data.
+    // like a storage
     private static final GestoreArchivi gestore = GestoreArchivi.getInstance(); 
     private static final CatalogoSoggetti catalogoSoggetti = CatalogoSoggetti.getInstance(); 
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);   // For taking user input.
 
 
     // main method - entry point of the program
     public static void main(String[] args) {
         // Dati di esempio
         
-        caricaDatiEsesmpio();
+        caricaDatiEsesmpio();    // load example data
         
-        int scelta = -1;
+        int scelta = -1;   // choice variable   
 
         // Main menu loop
         while (scelta != 0) {
-            System.out.println("\n--- MENU GESTIONE ARCHIVIO FOTOGRAFICO ---");
+            System.out.println("\n--- BENVENUTO NEL SISTEMA DI GESTIONE DELL ARCHIVIO FOTOGRAFICO ---");
             System.out.println("1. Gestione Archivi");
             System.out.println("2. Gestione Fotografie");
             System.out.println("3. Gestione Soggetti");
@@ -41,7 +42,7 @@ public class ProgettoArchivio {
                 switch (scelta) {
                     
                     case 1:
-                        menuGestioneArchivi(); // call to archive management menu
+                        menuGestioneArchivi();   // call to archive management menu
                         break;
                         
                     case 2:
@@ -54,12 +55,12 @@ public class ProgettoArchivio {
                         
                     case 4:
                         try{
-                        gestore.salvaSuFile();   // save archives to files
+                        gestore.salvaSuFile();    // save archives to files
                         System.out.println("Dati salvati con successo, arrivederci!");
                         }catch (Exception e){
                             System.out.println("Errore nel salvataggio: " + e.getMessage());
                         }
-                        scelta = 0; // Per uscire dal ciclo
+                        scelta = 0;   // Per uscire dal ciclo
                         break;
                         
                     case 0:
@@ -78,6 +79,7 @@ public class ProgettoArchivio {
         scanner.close();  // this function closes the scanner to free up resources.
     }
     
+
     //dati esempio
     private static void caricaDatiEsesmpio(){
             try {
@@ -91,6 +93,8 @@ public class ProgettoArchivio {
             // Ignora se i dati di esempio esistono già
         }
     }
+
+
     // menu archivi
     private static void menuGestioneArchivi() {
         
@@ -125,6 +129,7 @@ public class ProgettoArchivio {
         }
     }
 
+// ei porjionto complete.    
 
     // this is for collecting info and adding a new archive
     private static void aggiungiArchivio() {
@@ -137,33 +142,39 @@ public class ProgettoArchivio {
         
         String telefono = leggiTelefono("Telefono: ");
         
-        String orario = leggiStringa("Orario (es: 9-18): ");
+        String orario = leggiStringa("Orario (es: 9-18): "); 
         
-        try{
+        try{ // create manager object and archive object
         Responsabile resp = new Responsabile(nomeResp, indirizzo, telefono, orario);
-        Archivio archivio = new Archivio(nomeArchivio, resp);
+        Archivio archivio = new Archivio(nomeArchivio, resp); // create archive object and add it to the manager
         
+        // here we add the new archive to the manager(gestore)
         gestore.aggiungiArchivio(archivio);
         System.out.println("Archivio aggiunto con successo!");
     }catch (Exception e){
         System.out.println("Errore: " + e.getMessage());
     }
 }
-    // display all existing archives
+
+
+    // display all existing archives - 
     private static void visualizzaArchivi() {
         
         System.out.println("\n--- ELENCO ARCHIVI ---");
         
+        // check if there are no archives
         if (gestore.getArchivi().isEmpty()) {
             
             System.out.println("Nessun archivio presente.");
             return;
         } 
-        gestore.getArchivi().values().forEach(archivio -> System.out.println("- " + archivio));
+        // display all archives by iterating through the values of the map using java Stream API(forEach)
+        gestore.getArchivi().values().forEach(archivio -> System.out.println("- " + archivio));   // ---
+
+     
 
   }
     // this for managing photographs
-    
     private static void menuGestioneFotografie() {
         
         int scelta = -1;
@@ -178,7 +189,7 @@ public class ProgettoArchivio {
             System.out.print("Scelta: ");
             
             try {
-                
+                // taking user input as number
                 scelta = Integer.parseInt(scanner.nextLine());
                 switch (scelta) {
                     
@@ -207,36 +218,41 @@ public class ProgettoArchivio {
     // adding a new photograph to a selected archive
     private static void aggiungiFotografia() {
 
-        visualizzaArchivi();
+        visualizzaArchivi(); // display existing archives
         
-        if (gestore.getArchivi().isEmpty()) {
+        // check if there are no archives
+        if (gestore.getArchivi().isEmpty()) { 
             
             System.out.println("Nessun archivio presente. Creane uno prima!");
             return;
         }
         
-        String nomeArchivio = leggiStringa("Nome archivio: ");
+        // select the archive to which the photo will be added
+        String nomeArchivio = leggiStringa("Nome archivio: ");  // LEGGIsTRINGA( TO READ STRING FORM USER, LIKE "ABC  ADD")
+        // get the archive object from the manager
         Archivio archivio = gestore.getArchivio(nomeArchivio);
 
-        if (archivio == null) {
+        if (archivio == null) {  // check if the archive exists
             
             System.out.println("Archivio non trovato.");
             return;
         }
-
+        
+        // ask for the photo ID
         String idFoto = leggiStringa("ID foto: ");
         
         int altezza = leggiIntero("Altezza: ");
         int larghezza = leggiIntero("Larghezza: ");
         
-        StatoConservazione stato = leggiStato();
+        // read the conservation status
+        StatoConservazione stato = leggiStato();  /// -- 
          
         
       visualizzaCatalogo();
       
       Soggetto soggetto = null;
 
-      while (soggetto == null){
+      while (soggetto == null){                   //--
         String chiaveSoggetto = leggiStringa("Chiave soggetto: ");
         soggetto = catalogoSoggetti.trovaPerChiave(chiaveSoggetto);
         
@@ -244,6 +260,9 @@ public class ProgettoArchivio {
             System.out.println("Soggetto non trovato!");
         }
       }
+
+
+    /// EI PORJONNTO -- 2ND CODING SEASSION
 
         // ask if the photo is in color
         
@@ -292,8 +311,9 @@ public class ProgettoArchivio {
     
 
 
-    // show photos of a selected archive
+// show photos of a selected archive
     private static void visualizzaFotoArchivio() {
+        //print all archivo to select from
         visualizzaArchivi();
 
         String nomeArchivio = leggiStringa("Nome archivio: ");
@@ -313,7 +333,11 @@ public class ProgettoArchivio {
         }
          archivio.getFotografie().forEach(f -> System.out.println("- " + f));
     }
-    // display the subject catalog
+
+
+
+
+// display the subject catalog
     private static void visualizzaCatalogo() {
         
         System.out.println("\n--- Catalogo Soggetti ---");
@@ -367,7 +391,7 @@ public class ProgettoArchivio {
         switch (tipo) {
             case 1 -> {
                 char sesso = leggiChar("Sesso (M/F): ");
-                boolean vivente = leggiBoolean("Vivente? (s/n): ");
+                boolean vivente = leggiBoolean("Vivente? s = si, n = no, chose (s/n): ");
                 int anno = leggiIntero("Anno nascita: ");
                 nuovo = new Personaggio(id, nome, sesso, vivente, anno);
             }
@@ -408,6 +432,11 @@ public class ProgettoArchivio {
         }
     }
 
+
+
+//// from here 
+///   string: (Mee  M)
+/// 
 //exceptions
     
 private static String leggiStringa(String msg) {
@@ -419,6 +448,8 @@ private static String leggiStringa(String msg) {
         return s;
     }
     
+
+
 private static int leggiIntero(String msg) {
         while (true) {
             try {
@@ -429,6 +460,8 @@ private static int leggiIntero(String msg) {
             }
         }
     }
+
+
  private static String leggiNome(String msg) {
         String s;
         do {
@@ -451,6 +484,8 @@ private static int leggiIntero(String msg) {
         return tel;
     }
 
+
+
     private static char leggiChar(String msg) {
         while (true) {
             System.out.print(msg);
@@ -459,6 +494,7 @@ private static int leggiIntero(String msg) {
             System.out.println("Inserisci un solo carattere.");
         }
     }
+
 
     private static boolean leggiBoolean(String msg) {
         while (true) {
@@ -482,3 +518,4 @@ private static int leggiIntero(String msg) {
     }
 
 }
+
