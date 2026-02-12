@@ -54,7 +54,7 @@ public class Artista extends Personaggio {
         
         if (tipo == AttivitaPrevalente.ALTRO) {
             
-            throw new IllegalArgumentException("Per attività personalizzata usa il costruttore con parametro String!");
+            throw new IllegalArgumentException("Errore: per attività personalizzata usa il costruttore con parametro String!");
         }
         
         this.tipoAttivita = tipo;
@@ -81,7 +81,7 @@ public class Artista extends Personaggio {
         
         if (attivita == null || attivita.trim().isEmpty()) {
             
-            throw new IllegalArgumentException("L'inserimento dell'attività prevalente è obbligatoria!");
+            throw new IllegalArgumentException("Errore: l'inserimento dell'attività prevalente è obbligatoria!");
         }
         
         return attivita.trim();
@@ -125,3 +125,4 @@ public class Artista extends Personaggio {
         return super.toString() + " - Artista: " + descrizioneAttivita;
     }
 }
+
