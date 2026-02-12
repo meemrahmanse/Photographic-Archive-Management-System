@@ -32,7 +32,7 @@ public class Luogo extends Soggetto {
         
         if (nome == null || nome.trim().isEmpty()) {
             
-            throw new IllegalArgumentException("Il nome del luogo è obbligatorio!");
+            throw new IllegalArgumentException("Erore: il nome del luogo è obbligatorio!");
         }
         return nome.trim();
     }
@@ -61,3 +61,4 @@ public class Luogo extends Soggetto {
     }
 
 }
+
