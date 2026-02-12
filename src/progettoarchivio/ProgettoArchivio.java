@@ -81,7 +81,7 @@ public class ProgettoArchivio {
     
 
     //dati esempio
-    private static void caricaDatiEsesmpio(){
+    private static void caricaDatiEsempio(){
             try {
             
             catalogoSoggetti.aggiungiSoggetto(new Personaggio("p1", "Mario Rossi", 'M', false, 1980));
@@ -142,7 +142,7 @@ public class ProgettoArchivio {
         
         String telefono = leggiTelefono("Telefono: ");
         
-        String orario = leggiStringa("Orario (es: 9-18): "); 
+        String orario = leggiOrario("Orario (es: 9-18): "); 
         
         try{ // create manager object and archive object
         Responsabile resp = new Responsabile(nomeResp, indirizzo, telefono, orario);
@@ -270,7 +270,7 @@ public class ProgettoArchivio {
         
         Fotografia nuovaFoto;
         
-        if (colori.equalsIgnoreCase("sì")) {
+        if (colori.equalsIgnoreCase("s")) {
             
             String tipoStampa = leggiStringa("Tipo di stampa (Chiaro/Opaco): ");
             
@@ -390,13 +390,13 @@ public class ProgettoArchivio {
 
         switch (tipo) {
             case 1 -> {
-                char sesso = leggiChar("Sesso (M/F): ");
-                boolean vivente = leggiBoolean("Vivente? s = si, n = no, chose (s/n): ");
+                char sesso = leggiChar("Sesso (M/F/A): ");
+                boolean vivente = leggiBoolean("Vivente? (s/n): ");
                 int anno = leggiIntero("Anno nascita: ");
                 nuovo = new Personaggio(id, nome, sesso, vivente, anno);
             }
             case 2 -> {
-                char sesso = leggiChar("Sesso (M/F): ");
+                char sesso = leggiChar("Sesso (M/F/A): ");
                 boolean vivente = leggiBoolean("Vivente? (s/n): ");
                 int anno = leggiIntero("Anno nascita: ");
                 String partito = leggiStringa("Partito politico: ");
@@ -404,7 +404,7 @@ public class ProgettoArchivio {
                 nuovo = new Politico(id, nome, sesso, vivente, anno, partito, carica);
             }
             case 3 -> {
-                char sesso = leggiChar("Sesso (M/F): ");
+                char sesso = leggiChar("Sesso (M/F/A): ");
                 boolean vivente = leggiBoolean("Vivente? (s/n): ");
                 int anno = leggiIntero("Anno nascita: ");
                 String arte = leggiStringa("Disciplina artistica: ");
@@ -506,6 +506,18 @@ private static int leggiIntero(String msg) {
         }
     }
 
+    private static String leggiOrario(String msg) {
+    String s;
+    do {
+        System.out.print(msg);
+        s = scanner.nextLine().trim();
+        if (!s.matches("\\d{1,2}-\\d{1,2}"))
+            System.out.println("Formato orario non valido. Usa formato 9-18");
+    } while (!s.matches("\\d{1,2}-\\d{1,2}"));
+    return s;
+}
+
+
     private static StatoConservazione leggiStato() {
         while (true) {
             String s = leggiStringa("Stato (Buono/Danneggiato/Pessimo/Restaurato): ");
@@ -518,4 +530,5 @@ private static int leggiIntero(String msg) {
     }
 
 }
+
 
