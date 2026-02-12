@@ -43,7 +43,7 @@ public enum Genere {
             case 'M' -> M;
             case 'F' -> F;
             case 'A' -> A;
-            default -> throw new IllegalArgumentException("Sesso non valido: '%c'. Per favore usi 'M', 'F' oppure 'A'!".formatted(c));
+            default -> throw new IllegalArgumentException("Errore: Genere non valido: '%c'. Per favore, inserisca 'M', 'F' oppure 'A'!".formatted(c));
         };
     }
     
@@ -59,7 +59,7 @@ public enum Genere {
         
         if (s == null || s.trim().isEmpty()) {
             
-            throw new IllegalArgumentException("Per favore inserisca il sesso!");
+            throw new IllegalArgumentException("Errore: Questo campo non può essere vuoto!");
         }
         String upper = s.trim().toUpperCase();
         
@@ -69,7 +69,7 @@ public enum Genere {
         case "F", "FEMMINA" -> F;
         case "A", "ALTRO", "X" -> A;
             
-        default -> throw new IllegalArgumentException(String.format("Sesso non valido: '%s'. Usa 'M', 'F' oppure 'A'.", s));
+        default -> throw new IllegalArgumentException(String.format("Errore: genere non valido: '%s'. Utilizza 'M', 'F' oppure 'A'.", s));
     };
 }
 /**
@@ -82,3 +82,4 @@ public enum Genere {
         return etichetta;
     }
 }
+
