@@ -43,13 +43,13 @@ public CatalogoSoggetti (){}
         
         if (s == null) {
             
-            throw new IllegalArgumentException("\nQuesto campo è obbligatorio, perfavore inserisca il soggetto!");
+            throw new IllegalArgumentException("\nErrore: Questo campo è obbligatorio, perfavore inserisca il soggetto!");
         }
         String chiave = normalizzaChiave(s.getKey());
         
         if (soggetti.containsKey(chiave)) {
             
-            throw new IllegalArgumentException("\nChiave già esistente: '" + chiave + "'");
+            throw new IllegalArgumentException("\nErrore: Chiave già esistente: '" + chiave + "'");
         }
         soggetti.put(chiave, s);
     }
@@ -69,7 +69,7 @@ public CatalogoSoggetti (){}
         
         if (s == null) {
             
-            throw new NoSuchElementException("Soggetto non trovato con la chiave: '" + k + "'");
+            throw new NoSuchElementException("Errore: il soggetto con la chiave: '" + k + "' non è statotrovato!");
         }
         return s;
     }
@@ -114,9 +114,10 @@ public CatalogoSoggetti (){}
         
         if (chiave == null || chiave.trim().isEmpty()) {
             
-            throw new IllegalArgumentException("Questo campo è obbligatorio, perfavore inserisca la chiave!");
+            throw new IllegalArgumentException("Errore: Questo campo è obbligatorio, perfavore inserisca la chiave!");
         }
         return chiave.trim().replaceAll("\\s+", "").toUpperCase();
     }
 
 }
+
