@@ -32,7 +32,7 @@ public class Oggetto extends Soggetto {
         
         if (nome == null || nome.trim().isEmpty()){
             
-            throw new IllegalArgumentException("\nQuesto campo è obbligatorio, per favore inserisca il nome dell'oggetto!");
+            throw new IllegalArgumentException("\nErrore: questo campo è obbligatorio, inserite il nome dell'oggetto!");
         }
         return nome.trim();
     }
@@ -62,3 +62,4 @@ public class Oggetto extends Soggetto {
     }
 
 }
+
