@@ -1,8 +1,7 @@
 // Responsabile.java - meem
 
-package gestione;
+package progettoarchivio;
 
-import java.util.Objects;
 // this class represents a responsible person managing an archive with their context details.
 public class Responsabile {
 

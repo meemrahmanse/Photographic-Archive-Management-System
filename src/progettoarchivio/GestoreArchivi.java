@@ -137,10 +137,10 @@ public void salvaSuFile() {
         
         gson.toJson(archivi, writer);
         
-        System.out.println("Dati salvati con successo su " + NOME_FILE);
+
     } catch (IOException e) {
         
-        System.err.println("Errore: salvataggio JSON fallito: " + e.getMessage());
+        
     }
 }
 
@@ -170,12 +170,10 @@ public void salvaSuFile() {
         }
         
         archivi = caricati;
-        System.out.println("Dati caricati con successo da " + NOME_FILE);
+    
     
     } catch (Exception e) {
-        
-        System.err.println("[ERRORE] Lettura JSON fallita: " + e.getMessage());
-        System.err.println("[ATTENZIONE] Creazione nuovo archivio + backup del file corrotto.");
+
 
             // Backup del file danneggiato
         file.renameTo(new File("archivio_corrotto_backup.json"));

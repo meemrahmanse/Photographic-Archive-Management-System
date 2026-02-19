@@ -1,6 +1,6 @@
 package progettoarchivio;
 
-import java.util.Objects;
+
 
 /**
  * Rappresenta un artista con attività prevalente.
