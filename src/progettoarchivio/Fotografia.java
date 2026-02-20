@@ -3,6 +3,7 @@
 package progettoarchivio;
 
 import java.util.Objects;
+import java.time.LocalDate;
         
 /**
  * Rappresenta una fotografia con attributi di base:
@@ -19,15 +20,35 @@ public class Fotografia {
     private int larghezza;
     private StatoConservazione statoConservazione;
     private Soggetto soggetto;
+    private String titolo;
+    private String autore;
+    private LocalDate data;
 
     // costruttore principale
-    public Fotografia(String idFoto, int altezza, int larghezza, StatoConservazione statoConservazione, Soggetto soggetto) {
+    public Fotografia(String idFoto, int altezza, int larghezza, StatoConservazione statoConservazione, Soggetto soggetto, String titolo, String autore, LocalDate data) {
 
         setIdFoto(idFoto);
         setAltezza(altezza);
         setLarghezza(larghezza);
         this.statoConservazione = Objects.requireNonNull(statoConservazione,"Lo stato di conservazione non può essere nullo!");
         this.soggetto = Objects.requireNonNull(soggetto,"Il soggetto non può essere nullo!");
+        
+        if (titolo == null || titolo.isBlank()) {
+            throw new IllegalArgumentException("Titolo obbligatorio.");
+        }
+        
+        if (autore == null || autore.isBlank()) {
+            throw new IllegalArgumentException("Autore obbligatorio.");
+        }
+        
+        if (data == null) {
+            throw new IllegalArgumentException("Data obbligatoria.");
+
+        }
+        
+        this.titolo = titolo.trim();
+        this.autore = autore.trim();
+        this.data = data;
     }
 
     //costruttore vuoto
@@ -58,7 +79,31 @@ public class Fotografia {
     }
 
 
-    public int getAltezza() {
+    public String getTitolo() {
+		return titolo;
+	}
+
+	public void setTitolo(String titolo) {
+		this.titolo = titolo;
+	}
+
+	public String getAutore() {
+		return autore;
+	}
+
+	public void setAutore(String autore) {
+		this.autore = autore;
+	}
+
+	public LocalDate getData() {
+		return data;
+	}
+
+	public void setData(LocalDate data) {
+		this.data = data;
+	}
+
+	public int getAltezza() {
         
         return altezza;
     }

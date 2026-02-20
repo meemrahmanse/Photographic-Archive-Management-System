@@ -3,13 +3,15 @@
 package progettoarchivio;
 
 import com.google.gson.Gson;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GestoreArchivi è un singleton che gestisce più archivi fotografici.
@@ -22,8 +24,21 @@ public class GestoreArchivi {
     private Map<String, Archivio> archivi;
     private static final String NOME_FILE = "archivio.json";
 
+    public List<Fotografia> getTutteLeFotografie() {
+
+        List<Fotografia> tutte = new ArrayList<>();
+
+        for (Archivio a : archivi.values()) {
+            tutte.addAll(a.getFotografie());
+        }
+
+        return tutte;
+    }
+
+    
 //costruttore privato
 private GestoreArchivi() {
+	
     
         archivi = new HashMap<>();
         caricaDaFile();
@@ -66,6 +81,48 @@ private GestoreArchivi() {
         archivi.put(nome, archivio);
         salvaSuFile();
     }
+
+    public void aggiungiFotografia(String nomeArchivio, Fotografia f)
+            throws ArchivioException {
+
+        // Controllo oggetto nullo
+        if (f == null) {
+            throw new ArchivioException("Fotografia nulla.");
+        }
+
+        // Controllo archivio esistente
+        Archivio archivio = archivi.get(nomeArchivio);
+
+        if (archivio == null) {
+            throw new ArchivioException("Archivio non trovato.");
+        }
+
+        // Controllo ID
+        if (f.getIdFoto() == null || f.getIdFoto().isBlank()) {
+            throw new ArchivioException("ID non valido.");
+        }
+
+        if (archivio.cercaFoto(f.getIdFoto()) != null) {
+            throw new ArchivioException("ID già esistente.");
+        }
+
+        // Controllo campi obbligatori
+        if (f.getTitolo() == null || f.getTitolo().isBlank()) {
+            throw new ArchivioException("Titolo obbligatorio.");
+        }
+
+        if (f.getAutore() == null || f.getAutore().isBlank()) {
+            throw new ArchivioException("Autore obbligatorio.");
+        }
+
+        if (f.getData() == null) {
+            throw new ArchivioException("Data obbligatoria.");
+        }
+
+        // 5️⃣ Se tutto ok → modifica stato
+        archivio.aggiungiFoto(f);
+    }
+
 
 /**
 * Elimina un archivio dato il nome.
