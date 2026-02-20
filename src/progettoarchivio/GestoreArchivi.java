@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 /**
  * GestoreArchivi è un singleton che gestisce più archivi fotografici.
@@ -23,12 +24,67 @@ public class GestoreArchivi {
     private static volatile GestoreArchivi instance; //thread-safe singleton
     private Map<String, Archivio> archivi;
     private static final String NOME_FILE = "archivio.json";
+    
+   
+    public List<Fotografia> filtraPerStato(StatoConservazione stato) {
+
+        List<Fotografia> risultato = new ArrayList<>();
+
+        if (stato == null)
+            return risultato;
+
+        for (Fotografia f : getTutteLeFotografie()) {
+            if (stato.equals(f.getStatoConservazione())) {
+                risultato.add(f);
+            }
+        }
+
+        return risultato;
+    }
+
+
+    public List<Fotografia> cercaPerAutore(String autore) {
+
+        List<Fotografia> risultato = new ArrayList<>();
+
+        if (autore == null || autore.isBlank())
+            return risultato;
+
+        String query = autore.trim().toLowerCase();
+
+        for (Fotografia f : getTutteLeFotografie()) {
+            if (f.getAutore() != null &&
+                f.getAutore().toLowerCase().contains(query)) {
+                risultato.add(f);
+            }
+        }
+
+        return risultato;
+    }
+    
+    public List<Fotografia> cercaPerData(LocalDate data) {
+
+        List<Fotografia> risultato = new ArrayList<>();
+
+        if (data == null)
+            return risultato;
+
+        for (Fotografia f : getTutteLeFotografie()) {
+            if (data.equals(f.getData())) {
+                risultato.add(f);
+            }
+        }
+
+        return risultato;
+    }
+
 
     public List<Fotografia> getTutteLeFotografie() {
 
         List<Fotografia> tutte = new ArrayList<>();
 
         for (Archivio a : archivi.values()) {
+        	
             tutte.addAll(a.getFotografie());
         }
 
@@ -82,46 +138,66 @@ private GestoreArchivi() {
         salvaSuFile();
     }
 
+
     public void aggiungiFotografia(String nomeArchivio, Fotografia f)
             throws ArchivioException {
 
-        // Controllo oggetto nullo
-        if (f == null) {
+        if (f == null)
             throw new ArchivioException("Fotografia nulla.");
-        }
 
-        // Controllo archivio esistente
         Archivio archivio = archivi.get(nomeArchivio);
 
-        if (archivio == null) {
+        if (archivio == null)
             throw new ArchivioException("Archivio non trovato.");
-        }
 
-        // Controllo ID
-        if (f.getIdFoto() == null || f.getIdFoto().isBlank()) {
-            throw new ArchivioException("ID non valido.");
-        }
-
-        if (archivio.cercaFoto(f.getIdFoto()) != null) {
+        if (archivio.cercaFoto(f.getIdFoto()) != null)
             throw new ArchivioException("ID già esistente.");
-        }
 
-        // Controllo campi obbligatori
-        if (f.getTitolo() == null || f.getTitolo().isBlank()) {
-            throw new ArchivioException("Titolo obbligatorio.");
-        }
-
-        if (f.getAutore() == null || f.getAutore().isBlank()) {
-            throw new ArchivioException("Autore obbligatorio.");
-        }
-
-        if (f.getData() == null) {
-            throw new ArchivioException("Data obbligatoria.");
-        }
-
-        // 5️⃣ Se tutto ok → modifica stato
         archivio.aggiungiFoto(f);
     }
+
+    public void rimuoviFotografia(String nomeArchivio, String idFoto)
+            throws ArchivioException {
+
+        if (idFoto == null || idFoto.isBlank())
+            throw new ArchivioException("ID non valido.");
+
+        Archivio archivio = archivi.get(nomeArchivio);
+
+        if (archivio == null)
+            throw new ArchivioException("Archivio non trovato.");
+
+        Fotografia foto = archivio.cercaFoto(idFoto);
+
+        if (foto == null)
+            throw new ArchivioException("Fotografia non trovata.");
+
+        archivio.rimuoviFoto(idFoto);
+    }
+
+    
+    public void modificaFotografia(String nomeArchivio, Fotografia aggiornata)
+            throws ArchivioException {
+
+        if (aggiornata == null)
+            throw new ArchivioException("Fotografia nulla.");
+
+        Archivio archivio = archivi.get(nomeArchivio);
+
+        if (archivio == null)
+            throw new ArchivioException("Archivio non trovato.");
+
+        String id = aggiornata.getIdFoto();
+
+        if (id == null || id.isBlank())
+            throw new ArchivioException("ID non valido.");
+
+        if (archivio.cercaFoto(id) == null)
+            throw new ArchivioException("Fotografia non trovata.");
+
+        archivio.aggiornaFoto(aggiornata);
+    }
+
 
 
 /**

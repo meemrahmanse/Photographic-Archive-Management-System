@@ -51,15 +51,6 @@ public class Fotografia {
         this.data = data;
     }
 
-    //costruttore vuoto
-    public Fotografia() {
-    
-        this.idFoto = "";
-        this.altezza = 0;
-        this.larghezza = 0;
-        this.statoConservazione = StatoConservazione.BUONO; // default 
-        this.soggetto = null; 
-    }
 
     //getter & setter
     

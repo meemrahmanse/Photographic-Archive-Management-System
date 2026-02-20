@@ -71,21 +71,14 @@ public void aggiungiFoto(Fotografia foto) {
      * @return true se la foto è stata rimossa, false se non trovata.
      */
 
-    public Fotografia rimuoviFoto(String idFoto) {
-        
-        if (idFoto == null || idFoto.trim().isEmpty()) {
-            throw new IllegalArgumentException("L'ID della fotografia non può essere vuoto!");
-        }
+public Fotografia rimuoviFoto(String idFoto) {
+    return fotografie.remove(idFoto);
+}
 
-        Fotografia rimossa = fotografie.remove(idFoto.trim());
+public void aggiornaFoto(Fotografia foto) {
+    fotografie.put(foto.getIdFoto(), foto);
+}
 
-        if (rimossa == null) {
-            
-            throw new IllegalArgumentException("Nessuna fotografia trovata con ID '" + idFoto + "'!");
-        }
-
-        return rimossa;
-    }
 
     /**
      * Cerca una fotografia per ID.
