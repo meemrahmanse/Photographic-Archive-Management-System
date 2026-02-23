@@ -1,0 +1,36 @@
+[
+  {
+    "nomeArchivio": "Test",
+    "responsabile": {
+      "nome": "0098",
+      "indirizzo": "07656",
+      "telefono": "",
+      "orarioApertura": ""
+    },
+    "fotografie": []
+  },
+  {
+    "nomeArchivio": "Politics",
+    "responsabile": {
+      "nome": "Meem",
+      "indirizzo": "Dhaka, BD",
+      "telefono": "0185678",
+      "orarioApertura": "10 am"
+    },
+    "fotografie": [
+      {
+        "type": "FotoAColore",
+        "tipoStampa": "nice",
+        "idFoto": "1",
+        "dimensione": "400*400",
+        "statoConservazione": "Good",
+        "soggetto": {
+          "type": "Oggetto",
+          "nome": "Vaso Ming",
+          "descrizione": "Antico vaso cinese",
+          "key": "O1"
+        }
+      }
+    ]
+  }
+]
