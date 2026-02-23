@@ -1,6 +1,4 @@
-package progettoarchivio;
-
-
+package model;
 
 /**
  * Rappresenta un artista con attività prevalente.

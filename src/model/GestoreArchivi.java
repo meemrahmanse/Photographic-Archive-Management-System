@@ -1,15 +1,20 @@
 // GestoreArchivi.java - meem
 
-package progettoarchivio;
+package model;
 
 import com.google.gson.Gson;
-
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+
 import java.lang.reflect.Type;
+
 import java.io.*;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
@@ -156,6 +161,63 @@ private GestoreArchivi() {
         archivio.aggiungiFoto(f);
     }
 
+    public void save(String percorsoFile) throws ArchivioException {
+
+        if (percorsoFile == null || percorsoFile.isBlank())
+            throw new ArchivioException("Percorso file non valido.");
+
+        try (Writer writer = new FileWriter(percorsoFile)) {
+
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
+
+            gson.toJson(archivi, writer);
+
+        } catch (IOException e) {
+            throw new ArchivioException("Errore durante il salvataggio: " + e.getMessage());
+        }
+    }
+
+    
+    public void load(String percorsoFile) throws ArchivioException {
+
+        if (percorsoFile == null || percorsoFile.isBlank())
+            throw new ArchivioException("Percorso file non valido.");
+
+        File file = new File(percorsoFile);
+
+        if (!file.exists()) {
+            archivi = new HashMap<>();
+            return;
+        }
+
+        try  {
+        	
+        	Reader reader = new FileReader(file);
+            Gson gson = new Gson();
+
+            Type tipo = new TypeToken<Map<String, Archivio>>() {}.getType();
+
+            Map<String, Archivio> caricati = gson.fromJson(reader, tipo);
+
+            if (caricati != null)
+                archivi = caricati;
+            else
+                archivi = new HashMap<>();
+
+        } catch (IOException e) {
+        	
+        	throw new ArchivioException("Errore durante il caricamento: ", e);
+
+        } catch (JsonSyntaxException e) {
+        	
+        	throw new ArchivioException("Il file JSON è malformato,", e);    
+    
+        }
+    }
+    
+    
     public void rimuoviFotografia(String nomeArchivio, String idFoto)
             throws ArchivioException {
 
@@ -175,7 +237,7 @@ private GestoreArchivi() {
         archivio.rimuoviFoto(idFoto);
     }
 
-    
+     
     public void modificaFotografia(String nomeArchivio, Fotografia aggiornata)
             throws ArchivioException {
 

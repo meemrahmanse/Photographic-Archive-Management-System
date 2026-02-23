@@ -1,4 +1,4 @@
-package progettoarchivio;
+package model;
 
 public enum StatoConservazione {
 

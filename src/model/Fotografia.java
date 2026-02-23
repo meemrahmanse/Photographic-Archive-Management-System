@@ -1,6 +1,6 @@
 // Fotografia.java - meem
 
-package progettoarchivio;
+package model;
 
 import java.util.Objects;
 import java.time.LocalDate;
@@ -50,7 +50,8 @@ public class Fotografia {
         this.autore = autore.trim();
         this.data = data;
     }
-
+    public Fotografia() {
+    }
 
     //getter & setter
     

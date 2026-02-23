@@ -1,4 +1,4 @@
-package progettoarchivio;
+package model;
 
 /**
  * Enum per rappresentare il sesso di una persona.

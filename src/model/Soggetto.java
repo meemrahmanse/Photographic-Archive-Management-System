@@ -3,7 +3,7 @@
     *Ogni soggetto ha una chiave univoca per il catalogo
     * La chiave è immutabile, normalizzata in maiuscolo e validata al momento della costruzione.
 */
-package progettoarchivio;
+package model;
 
 import java.util.Locale;
 import java.util.Objects;

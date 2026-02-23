@@ -1,6 +1,8 @@
 // FotoAColore.java - meem
 
-package progettoarchivio;
+package model;
+
+import java.time.LocalDate;
 
 /**
  * Foto a colori: estende Fotografia aggiungendo il tipo di stampa
@@ -13,9 +15,9 @@ public class FotoAColore extends Fotografia {
     
   // costruttore principale che delega al costruttore di Fotografia
     
-    public FotoAColore(String idFoto, int altezza, int larghezza, StatoConservazione stato, Soggetto soggetto, String tipoStampa) {
+    public FotoAColore(String idFoto, int altezza, int larghezza, StatoConservazione stato, Soggetto soggetto, String tipoStampa, String titolo, String autore, LocalDate data) {
 
-        super(idFoto, altezza, larghezza, stato, soggetto);
+        super(idFoto, altezza, larghezza, stato, soggetto, titolo, autore, data);
         setTipoStampa(tipoStampa);
 
     }

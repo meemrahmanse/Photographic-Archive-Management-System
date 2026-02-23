@@ -1,4 +1,4 @@
-package progettoarchivio;
+package model;
 
 /**
  * Rappresenta un luogo fisico fotografato.

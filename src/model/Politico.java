@@ -1,7 +1,7 @@
 /**
     *Politico con partito e carica governativa.
 */
-package progettoarchivio;
+package model;
 
 public class Politico extends Personaggio {
     

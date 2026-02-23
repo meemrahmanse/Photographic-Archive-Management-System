@@ -1,6 +1,9 @@
-package progettoarchivio;
+package view;
 
 import javax.swing.table.AbstractTableModel;
+
+import model.Fotografia;
+
 import java.util.List;
 import java.util.ArrayList;
 
