@@ -1,7 +1,9 @@
 # Photographic Archive Management System
 
 ## Description
-এটি একটি Java-based console application যা photographic archives manage করে। এখানে JSON database ব্যবহার করা হয়েছে data persistence এর জন্য।
+È un’applicazione console basata su Java che gestisce archivi fotografici.
+Per la persistenza dei dati viene utilizzato un database JSON.
+
 
 ## Features
 - Archive management (create, view)
@@ -77,3 +79,4 @@ Data is saved in the `data/` folder:
 1. Run the application
 2. Use menu options to manage archives and photographs
 3. Select "4. Salva ed esci" to save all data to JSON files
+
