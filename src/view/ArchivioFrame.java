@@ -281,51 +281,121 @@ public class ArchivioFrame extends JFrame {
         if (archivioSelezionato == null) { mostraAvviso("Seleziona un archivio."); return; }
 
         JDialog d = new JDialog(this, "Aggiungi Fotografia", true);
-        d.setSize(480, 540);
+        d.setSize(500, 620);
         d.setLocationRelativeTo(this);
         d.getContentPane().setBackground(BG_PANEL);
         d.setLayout(new BorderLayout(10, 10));
 
-        JPanel form = new JPanel(new GridLayout(0, 2, 8, 8));
-        form.setBackground(BG_PANEL);
-        form.setBorder(new EmptyBorder(16, 16, 8, 16));
+        // ── Pannello campi fissi (sempre visibili) ──────────────────────────
+        JPanel formFisso = new JPanel(new GridLayout(0, 2, 8, 8));
+        formFisso.setBackground(BG_PANEL);
+        formFisso.setBorder(new EmptyBorder(16, 16, 8, 16));
 
-        JTextField tfId      = addFormRow(form, "ID Foto*:");
-        JTextField tfTitolo  = addFormRow(form, "Titolo*:");
-        JTextField tfAutore  = addFormRow(form, "Autore*:");
-        JTextField tfData    = addFormRow(form, "Data (AAAA-MM-GG)*:");
-        JTextField tfAlt     = addFormRow(form, "Altezza (px)*:");
-        JTextField tfLarg    = addFormRow(form, "Larghezza (px)*:");
+        JTextField tfId     = addFormRow(formFisso, "ID Foto*:");
+        JTextField tfTitolo = addFormRow(formFisso, "Titolo*:");
+        JTextField tfAutore = addFormRow(formFisso, "Autore*:");
+        JTextField tfData   = addFormRow(formFisso, "Data (AAAA-MM-GG)*:");
+        JTextField tfAlt    = addFormRow(formFisso, "Altezza (px)*:");
+        JTextField tfLarg   = addFormRow(formFisso, "Larghezza (px)*:");
 
-        form.add(label("Stato conservazione*:"));
+        formFisso.add(label("Stato conservazione*:"));
         JComboBox<StatoConservazione> comboStato = new JComboBox<>(StatoConservazione.values());
         styleCombo(comboStato);
-        form.add(comboStato);
+        formFisso.add(comboStato);
 
-        form.add(label("Tipo soggetto*:"));
-        JComboBox<String> comboTipoSogg = new JComboBox<>(new String[]{"Luogo", "Personaggio", "Artista", "Oggetto", "Opera d'Arte"});
-        styleCombo(comboTipoSogg);
-        form.add(comboTipoSogg);
+        formFisso.add(label("Tipo soggetto*:"));
+        JComboBox<String> comboTipo = new JComboBox<>(
+            new String[]{"Luogo", "Personaggio", "Artista", "Oggetto", "Opera d'Arte"});
+        styleCombo(comboTipo);
+        formFisso.add(comboTipo);
 
-        JTextField tfSoggKey  = addFormRow(form, "Chiave soggetto* (A-Z 0-9):");
-        JTextField tfSoggDesc = addFormRow(form, "Nome/Descrizione soggetto*:");
+        // ── Pannello campi dinamici (cambia in base al tipo soggetto) ───────
+        JPanel formDinamico = new JPanel(new GridLayout(0, 2, 8, 8));
+        formDinamico.setBackground(BG_PANEL);
+        formDinamico.setBorder(new EmptyBorder(0, 16, 8, 16));
 
+        // Mappa che tiene i JTextField dei campi dinamici correnti
+        // Usiamo un array di riferimenti per poterli leggere nel bottone "Aggiungi"
+        JTextField[] campiDinamici = new JTextField[6];
+
+        // Metodo che ricostruisce il pannello dinamico in base al tipo scelto
+        Runnable aggiornaCampiDinamici = () -> {
+            formDinamico.removeAll();
+            String tipo = (String) comboTipo.getSelectedItem();
+
+            switch (tipo) {
+                case "Luogo" -> {
+                    campiDinamici[0] = addFormRow(formDinamico, "Chiave* (A-Z 0-9):");
+                    campiDinamici[1] = addFormRow(formDinamico, "Nome luogo*:");
+                    campiDinamici[2] = addFormRow(formDinamico, "Descrizione (opz.):");
+                    campiDinamici[3] = campiDinamici[4] = campiDinamici[5] = null;
+                }
+                case "Personaggio" -> {
+                    campiDinamici[0] = addFormRow(formDinamico, "Chiave* (A-Z 0-9):");
+                    campiDinamici[1] = addFormRow(formDinamico, "Nome*:");
+                    campiDinamici[2] = addFormRow(formDinamico, "Sesso (M/F/A)*:");
+                    campiDinamici[3] = addFormRow(formDinamico, "Anno nascita*:");
+                    campiDinamici[4] = addFormRow(formDinamico, "Deceduto (true/false)*:");
+                    campiDinamici[5] = null;
+                }
+                case "Artista" -> {
+                    campiDinamici[0] = addFormRow(formDinamico, "Chiave* (A-Z 0-9):");
+                    campiDinamici[1] = addFormRow(formDinamico, "Nome*:");
+                    campiDinamici[2] = addFormRow(formDinamico, "Sesso (M/F/A)*:");
+                    campiDinamici[3] = addFormRow(formDinamico, "Anno nascita*:");
+                    campiDinamici[4] = addFormRow(formDinamico, "Deceduto (true/false)*:");
+                    campiDinamici[5] = addFormRow(formDinamico, "Attività (es. Pittore)*:");
+                }
+                case "Oggetto" -> {
+                    campiDinamici[0] = addFormRow(formDinamico, "Chiave* (A-Z 0-9):");
+                    campiDinamici[1] = addFormRow(formDinamico, "Nome oggetto*:");
+                    campiDinamici[2] = addFormRow(formDinamico, "Descrizione (opz.):");
+                    campiDinamici[3] = campiDinamici[4] = campiDinamici[5] = null;
+                }
+                case "Opera d'Arte" -> {
+                    campiDinamici[0] = addFormRow(formDinamico, "Chiave* (A-Z 0-9):");
+                    campiDinamici[1] = addFormRow(formDinamico, "Nome opera*:");
+                    campiDinamici[2] = addFormRow(formDinamico, "Artista*:");
+                    campiDinamici[3] = addFormRow(formDinamico, "Luogo*:");
+                    campiDinamici[4] = addFormRow(formDinamico, "Anno creazione*:");
+                    campiDinamici[5] = null;
+                }
+            }
+
+            // Ridisegna il pannello
+            formDinamico.revalidate();
+            formDinamico.repaint();
+            d.revalidate();
+            d.repaint();
+        };
+
+        // Aggiorna i campi ogni volta che l'utente cambia tipo soggetto
+        comboTipo.addActionListener(e -> aggiornaCampiDinamici.run());
+
+        // Carica i campi per il tipo di default (Luogo)
+        aggiornaCampiDinamici.run();
+
+        // ── Bottone Aggiungi ────────────────────────────────────────────────
         JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         btnRow.setBackground(BG_PANEL);
         btnRow.setBorder(new EmptyBorder(0, 0, 12, 12));
         btnRow.add(makeBtn("Annulla", BG_CARD, e -> d.dispose()));
         btnRow.add(makeBtn("Aggiungi", ACCENT, e -> {
             try {
-                Soggetto soggetto = creaSoggetto(
-                    (String) comboTipoSogg.getSelectedItem(),
-                    tfSoggKey.getText(), tfSoggDesc.getText());
+                // Costruisce il soggetto leggendo i campiDinamici
+                Soggetto soggetto = creaSoggettoAvanzato(
+                    (String) comboTipo.getSelectedItem(), campiDinamici);
+
                 Fotografia foto = new Fotografia(
                     tfId.getText(),
                     Integer.parseInt(tfAlt.getText().trim()),
                     Integer.parseInt(tfLarg.getText().trim()),
                     (StatoConservazione) comboStato.getSelectedItem(),
-                    soggetto, tfTitolo.getText(), tfAutore.getText(),
-                    LocalDate.parse(tfData.getText().trim()));
+                    soggetto,
+                    tfTitolo.getText(),
+                    tfAutore.getText(),
+                    LocalDate.parse(tfData.getText().trim())
+                );
                 gestore.aggiungiFotografia(archivioSelezionato, foto);
                 gestore.salvaSuFile();
                 aggiornaTabella();
@@ -334,27 +404,69 @@ public class ArchivioFrame extends JFrame {
             } catch (ArchivioException ex) {
                 mostraErrore(ex.getMessage());
             } catch (NumberFormatException ex) {
-                mostraErrore("Altezza e larghezza devono essere numeri interi.");
+                mostraErrore("I campi numerici (altezza, larghezza, anno) devono essere numeri interi.");
             } catch (Exception ex) {
                 mostraErrore(ex.getMessage());
             }
         }));
 
-        JScrollPane scrollForm = new JScrollPane(form);
+        // ── Assembla tutto in un unico pannello scrollabile ─────────────────
+        JPanel tuttoIlForm = new JPanel(new BorderLayout());
+        tuttoIlForm.setBackground(BG_PANEL);
+        tuttoIlForm.add(formFisso,    BorderLayout.NORTH);
+        tuttoIlForm.add(formDinamico, BorderLayout.CENTER);
+
+        JScrollPane scrollForm = new JScrollPane(tuttoIlForm);
         scrollForm.setBorder(null);
         scrollForm.getViewport().setBackground(BG_PANEL);
+
         d.add(scrollForm, BorderLayout.CENTER);
         d.add(btnRow,     BorderLayout.SOUTH);
         d.setVisible(true);
     }
-
-    private Soggetto creaSoggetto(String tipo, String key, String desc) {
+    
+    
+    private Soggetto creaSoggettoAvanzato(String tipo, JTextField[] c) {
+        // c[0] = chiave, c[1..5] = campi specifici per tipo
         return switch (tipo) {
-            case "Luogo"        -> new Luogo(key, desc, "");
-            case "Oggetto"      -> new Oggetto(key, desc, "");
-            case "Opera d'Arte" -> new OperaArte(key, desc, "Sconosciuto", "Sconosciuto", 0);
-            case "Artista"      -> new Artista(key, desc, 'A', false, 1900, "Pittore");
-            default             -> new Personaggio(key, desc, 'A', false, 1900);
+            case "Luogo" ->
+                new Luogo(
+                    c[0].getText(),   // chiave
+                    c[1].getText(),   // nome
+                    c[2] != null ? c[2].getText() : ""  // descrizione opzionale
+                );
+            case "Personaggio" ->
+                new Personaggio(
+                    c[0].getText(),                        // chiave
+                    c[1].getText(),                        // nome
+                    c[2].getText().trim().charAt(0),       // sesso (M/F/A)
+                    Boolean.parseBoolean(c[4].getText()),  // deceduto
+                    Integer.parseInt(c[3].getText().trim()) // anno nascita
+                );
+            case "Artista" ->
+                new Artista(
+                    c[0].getText(),                        // chiave
+                    c[1].getText(),                        // nome
+                    c[2].getText().trim().charAt(0),       // sesso
+                    Boolean.parseBoolean(c[4].getText()),  // deceduto
+                    Integer.parseInt(c[3].getText().trim()), // anno nascita
+                    c[5].getText()                         // attività
+                );
+            case "Oggetto" ->
+                new Oggetto(
+                    c[0].getText(),   // chiave
+                    c[1].getText(),   // nome
+                    c[2] != null ? c[2].getText() : ""  // descrizione opzionale
+                );
+            case "Opera d'Arte" ->
+                new OperaArte(
+                    c[0].getText(),                        // chiave
+                    c[1].getText(),                        // nome opera
+                    c[2].getText(),                        // artista
+                    c[3].getText(),                        // luogo
+                    Integer.parseInt(c[4].getText().trim()) // anno
+                );
+            default -> throw new IllegalArgumentException("Tipo soggetto non riconosciuto.");
         };
     }
 
