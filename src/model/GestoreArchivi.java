@@ -1,5 +1,3 @@
-// GestoreArchivi.java - meem
-
 package model;
 
 import com.google.gson.Gson;
@@ -377,7 +375,3 @@ public void salvaSuFile() {
         }
     }
 }
-
-
-
-// this class manages multiple archives, allowing saving and loading from a file.

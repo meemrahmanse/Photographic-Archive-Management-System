@@ -1,16 +1,12 @@
-// Fotografia.java - meem
-
 package model;
 
 import java.util.Objects;
 import java.time.LocalDate;
         
 /**
- * Rappresenta una fotografia con attributi di base:
- * - ID univoco
- * - Dimensione
- * - Stato di conservazione (enum)
- * - Soggetto fotografato
+ * Rappresenta una fotografia con i suoi attributi principali:
+ * ID univoco, dimensioni, stato di conservazione, soggetto fotografato,
+ * titolo, autore e data di scatto.
  */
 
 public class Fotografia {
@@ -24,7 +20,19 @@ public class Fotografia {
     private String autore;
     private LocalDate data;
 
-    // costruttore principale
+    /**
+     * Costruisce una fotografia con tutti i dati obbligatori.
+     * @param idFoto              identificativo univoco
+     * @param altezza             altezza in pixel (deve essere positiva)
+     * @param larghezza           larghezza in pixel (deve essere positiva)
+     * @param statoConservazione  stato di conservazione
+     * @param soggetto            soggetto fotografato
+     * @param titolo              titolo della fotografia
+     * @param autore              autore della fotografia
+     * @param data                data di scatto
+     * @throws IllegalArgumentException se uno dei parametri non è valido
+     */
+    
     public Fotografia(String idFoto, int altezza, int larghezza, StatoConservazione statoConservazione, Soggetto soggetto, String titolo, String autore, LocalDate data) {
 
         setIdFoto(idFoto);
@@ -34,33 +42,43 @@ public class Fotografia {
         this.soggetto = Objects.requireNonNull(soggetto,"Il soggetto non può essere nullo!");
         
         if (titolo == null || titolo.isBlank()) {
+        	
             throw new IllegalArgumentException("Titolo obbligatorio.");
         }
         
         if (autore == null || autore.isBlank()) {
+        	
             throw new IllegalArgumentException("Autore obbligatorio.");
         }
         
         if (data == null) {
+        	
             throw new IllegalArgumentException("Data obbligatoria.");
-
         }
         
         this.titolo = titolo.trim();
         this.autore = autore.trim();
         this.data = data;
     }
-    public Fotografia() {
-    }
+    
+    /**
+     * Costruttore vuoto necessario per la deserializzazione da file JSON.
+     */
+    
+    public Fotografia() {}
 
-    //getter & setter
     
     public String getIdFoto() {
         
         return idFoto;
     }
 
-
+    /**
+     * Imposta l'ID della fotografia.
+     * @param idFoto identificativo univoco (non può essere nullo o vuoto)
+     * @throws IllegalArgumentException se l'ID non è valido
+     */
+    
     public void setIdFoto(String idFoto) {
         
         if (idFoto == null || idFoto.trim().isEmpty()){
@@ -105,11 +123,17 @@ public class Fotografia {
         return larghezza;
     }
 
+    /**
+     * Imposta l'altezza della fotografia.
+     * @param altezza altezza in pixel (deve essere positiva)
+     * @throws IllegalArgumentException se il valore è minore o uguale a zero
+     */
+    
     public void setAltezza(int altezza) {
         
         if (altezza <= 0) {
             
-            throw new IllegalArgumentException("L' deve essere positiva!");
+            throw new IllegalArgumentException("L'altezza deve essere positiva!");
         }
         this.altezza = altezza;
     }
@@ -129,8 +153,9 @@ public class Fotografia {
     }
 
     /**
-     * Imposta lo stato di conservazione da stringa (conversione automatica).
-     * Accetta valori come: "buono", "danneggiato", "pessimo", "restaurato".
+     * Imposta lo stato di conservazione da stringa (case-insensitive).
+     * @param statoConservazione stringa corrispondente a un valore dell'enum
+     * @throws IllegalArgumentException se il valore non è riconosciuto
      */
     
     public void setStatoConservazione(String statoConservazione) {
@@ -139,9 +164,11 @@ public class Fotografia {
         
         throw new IllegalArgumentException("Stato di conservazione non valido!");
     }
+    
     try {
         
-        this.statoConservazione = StatoConservazione.valueOf(statoConservazione.trim(). toUpperCase());
+        this.statoConservazione = StatoConservazione.valueOf(statoConservazione.trim().toUpperCase());
+    
     } catch (IllegalArgumentException e) {
         
         throw new IllegalArgumentException("Valore non riconosciuto: " + statoConservazione + ". Valori ammessi: BUONO, DANNEGGIATO, PESSIMO, RESTAURATO.");
@@ -164,12 +191,15 @@ public class Fotografia {
     }
 
     
-    // string representation of the photograph
     @Override
     
     public String toString() {
         return "Fotografia [ID: " + idFoto + ", Dimensione: " + altezza + " x " + larghezza + ", Stato: " + statoConservazione + ", Soggetto: " + (soggetto != null ? soggetto : "N/D") + "]";
     }
+    
+    /**
+     * Due fotografie sono uguali se hanno lo stesso ID.
+     */
     
     @Override
     
@@ -184,17 +214,20 @@ public class Fotografia {
             
             return false;
         }
+        
         Fotografia other = (Fotografia) obj;
         
         return idFoto != null && idFoto.equals(other.idFoto);
     }
 
+    /**
+     * Il codice hash è basato sull'ID della fotografia.
+     */
+    
     @Override
+    
     public int hashCode() {
         
         return idFoto != null ? idFoto.hashCode() : 0;
     }
 }
-
-
-// this class represents a photograph with its basic attributes.

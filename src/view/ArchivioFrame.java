@@ -37,7 +37,10 @@ public class ArchivioFrame extends JFrame {
     private JLabel                   labelArchivioCorrente;
     private JLabel                   labelStats;
 
+    
+    
     public ArchivioFrame(GestoreArchivi gestore) {
+    	
         this.gestore = gestore;
         setTitle("Photographic Archive Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,14 +49,19 @@ public class ArchivioFrame extends JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(BG_DARK);
         addWindowListener(new WindowAdapter() {
-            @Override public void windowClosing(WindowEvent e) { gestore.salvaSuFile(); }
+        	
+            @Override
+            
+            public void windowClosing(WindowEvent e) { gestore.salvaSuFile(); }
         });
+        
         initUI();
         aggiornaListaArchivi();
         setVisible(true);
     }
 
     private void initUI() {
+    	
         setLayout(new BorderLayout());
         add(buildHeader(),    BorderLayout.NORTH);
         add(buildSidebar(),   BorderLayout.WEST);
@@ -61,6 +69,7 @@ public class ArchivioFrame extends JFrame {
     }
 
     private JPanel buildHeader() {
+    	
         JPanel p = new JPanel(new BorderLayout());
         p.setBackground(new Color(20, 20, 30));
         p.setBorder(new EmptyBorder(12, 20, 12, 20));
@@ -76,6 +85,7 @@ public class ArchivioFrame extends JFrame {
     }
 
     private JPanel buildSidebar() {
+    	
         JPanel p = new JPanel(new BorderLayout(0, 10));
         p.setBackground(BG_PANEL);
         p.setPreferredSize(new Dimension(230, 0));
@@ -113,6 +123,7 @@ public class ArchivioFrame extends JFrame {
     }
 
     private JPanel buildMainPanel() {
+    	
         JPanel p = new JPanel(new BorderLayout(0, 10));
         p.setBackground(BG_DARK);
         p.setBorder(new EmptyBorder(16, 16, 16, 16));
@@ -141,6 +152,7 @@ public class ArchivioFrame extends JFrame {
     }
 
     private JPanel buildToolbar() {
+    	
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         p.setBackground(BG_DARK);
         p.add(makeBtn("+ Aggiungi Foto",  ACCENT,     e -> dialogAggiungiFoto()));
@@ -150,6 +162,7 @@ public class ArchivioFrame extends JFrame {
     }
 
     private JPanel buildSearchBar() {
+    	
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         p.setBackground(BG_DARK);
         JLabel lbl = new JLabel("Cerca:");
@@ -161,68 +174,102 @@ public class ArchivioFrame extends JFrame {
         JComboBox<String> combo = new JComboBox<>(opzioni);
         styleCombo(combo);
         JButton btnCerca = makeBtn("Cerca", ACCENT, null);
+        
         btnCerca.addActionListener(e -> {
+        	
             String query = tfRicerca.getText().trim();
             int sel = combo.getSelectedIndex();
             List<Fotografia> risultati;
+            
             if (sel == 0) {
+            	
                 risultati = gestore.cercaPerAutore(query);
+            
             } else if (sel == 1) {
+            	
                 try {
+                	
                     StatoConservazione stato = StatoConservazione.fromString(query);
                     risultati = gestore.filtraPerStato(stato);
+                
                 } catch (IllegalArgumentException ex) {
+                	
                     mostraErrore("Stato non valido. Usa: BUONO, DANEGGIATO, PESSIMO, RESTAURATO");
                     return;
                 }
+           
             } else {
+            	
                 risultati = gestore.getTutteLeFotografie();
             }
+            
             tableModel.aggiornaDati(risultati);
             labelArchivioCorrente.setText("Risultati: " + risultati.size() + " foto trovate");
         });
+        
         JButton btnReset = makeBtn("Reset", BG_CARD, e -> {
             tfRicerca.setText("");
             aggiornaTabella();
             aggiornaLabelArchivio();
         });
+        
         p.add(lbl); p.add(tfRicerca); p.add(combo); p.add(btnCerca); p.add(btnReset);
         return p;
     }
 
-    // ── Aggiornamenti stato ──────────────────────────────────────────────────
+    //Aggiornamenti stato 
 
     private void aggiornaListaArchivi() {
+    	
         String sel = archivioSelezionato;
         listaArchiviModel.clear();
         gestore.getArchivi().keySet().stream().sorted().forEach(listaArchiviModel::addElement);
+        
         int tot = gestore.getTutteLeFotografie().size();
         labelStats.setText(listaArchiviModel.size() + " archivi  |  " + tot + " fotografie");
+        
         if (sel != null && listaArchiviModel.contains(sel)) {
+        	
             listaArchivi.setSelectedValue(sel, true);
         }
     }
 
     private void aggiornaTabella() {
-        if (archivioSelezionato == null) { tableModel.aggiornaDati(new ArrayList<>()); return; }
+    	
+        if (archivioSelezionato == null) { 
+        	
+        	tableModel.aggiornaDati(new ArrayList<>()); 
+        	
+        	return;       	
+        }
+        
         Archivio a = gestore.getArchivio(archivioSelezionato);
-        if (a != null) tableModel.aggiornaDati(new ArrayList<>(a.getFotografie()));
+        if (a != null) {
+        	
+        	tableModel.aggiornaDati(new ArrayList<>(a.getFotografie()));
+        }
+        
         aggiornaListaArchivi();
     }
 
     private void aggiornaLabelArchivio() {
+    	
         if (archivioSelezionato == null) {
+        	
             labelArchivioCorrente.setText("<- Seleziona un archivio");
+        
         } else {
+        	
             Archivio a = gestore.getArchivio(archivioSelezionato);
             int n = (a != null) ? a.getFotografie().size() : 0;
             labelArchivioCorrente.setText("Archivio: " + archivioSelezionato + "   (" + n + " fotografie)");
         }
     }
 
-    // ── Dialog: Nuovo Archivio ───────────────────────────────────────────────
+    // Dialog: Nuovo Archivio 
 
     private void dialogNuovoArchivio() {
+    	
         JDialog d = new JDialog(this, "Nuovo Archivio", true);
         d.setSize(420, 340);
         d.setLocationRelativeTo(this);
@@ -244,7 +291,9 @@ public class ArchivioFrame extends JFrame {
         btnRow.setBorder(new EmptyBorder(0, 0, 12, 12));
         btnRow.add(makeBtn("Annulla", BG_CARD, e -> d.dispose()));
         btnRow.add(makeBtn("Crea", ACCENT, e -> {
-            try {
+            
+        	try {
+        		
                 Responsabile r = new Responsabile(
                     tfRespons.getText(), tfIndirizzo.getText(),
                     tfTelefono.getText(), tfOrario.getText());
@@ -262,11 +311,20 @@ public class ArchivioFrame extends JFrame {
     }
 
     private void eliminaArchivio() {
-        if (archivioSelezionato == null) { mostraAvviso("Seleziona un archivio."); return; }
+    	
+        if (archivioSelezionato == null) { 
+        	
+        	mostraAvviso("Seleziona un archivio."); 
+        	
+        	return; 
+        	}
+        
         int r = JOptionPane.showConfirmDialog(this,
             "Eliminare l'archivio \"" + archivioSelezionato + "\"?\nTutte le fotografie verranno perse.",
             "Conferma eliminazione", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        
         if (r == JOptionPane.YES_OPTION) {
+        	
             gestore.eliminaArchivio(archivioSelezionato);
             archivioSelezionato = null;
             aggiornaListaArchivi();
@@ -275,10 +333,16 @@ public class ArchivioFrame extends JFrame {
         }
     }
 
-    // ── Dialog: Aggiungi Foto ────────────────────────────────────────────────
+    //Dialog: Aggiungi Foto 
 
     private void dialogAggiungiFoto() {
-        if (archivioSelezionato == null) { mostraAvviso("Seleziona un archivio."); return; }
+    	
+        if (archivioSelezionato == null) {
+        	
+        	mostraAvviso("Seleziona un archivio."); 
+        
+        	return; 
+        }
 
         JDialog d = new JDialog(this, "Aggiungi Fotografia", true);
         d.setSize(500, 620);
@@ -286,7 +350,8 @@ public class ArchivioFrame extends JFrame {
         d.getContentPane().setBackground(BG_PANEL);
         d.setLayout(new BorderLayout(10, 10));
 
-        // ── Pannello campi fissi (sempre visibili) ──────────────────────────
+        // Pannello campi fissi (sempre visibili)
+        
         JPanel formFisso = new JPanel(new GridLayout(0, 2, 8, 8));
         formFisso.setBackground(BG_PANEL);
         formFisso.setBorder(new EmptyBorder(16, 16, 8, 16));
@@ -309,21 +374,26 @@ public class ArchivioFrame extends JFrame {
         styleCombo(comboTipo);
         formFisso.add(comboTipo);
 
-        // ── Pannello campi dinamici (cambia in base al tipo soggetto) ───────
+        //Pannello campi dinamici (cambia in base al tipo soggetto) 
+        
         JPanel formDinamico = new JPanel(new GridLayout(0, 2, 8, 8));
         formDinamico.setBackground(BG_PANEL);
         formDinamico.setBorder(new EmptyBorder(0, 16, 8, 16));
 
         // Mappa che tiene i JTextField dei campi dinamici correnti
         // Usiamo un array di riferimenti per poterli leggere nel bottone "Aggiungi"
+        
         JTextField[] campiDinamici = new JTextField[6];
 
         // Metodo che ricostruisce il pannello dinamico in base al tipo scelto
+        
         Runnable aggiornaCampiDinamici = () -> {
+        	
             formDinamico.removeAll();
             String tipo = (String) comboTipo.getSelectedItem();
 
             switch (tipo) {
+            
                 case "Luogo" -> {
                     campiDinamici[0] = addFormRow(formDinamico, "Chiave* (A-Z 0-9):");
                     campiDinamici[1] = addFormRow(formDinamico, "Nome luogo*:");
@@ -331,6 +401,7 @@ public class ArchivioFrame extends JFrame {
                     campiDinamici[3] = campiDinamici[4] = campiDinamici[5] = null;
                 }
                 case "Personaggio" -> {
+                	
                     campiDinamici[0] = addFormRow(formDinamico, "Chiave* (A-Z 0-9):");
                     campiDinamici[1] = addFormRow(formDinamico, "Nome*:");
                     campiDinamici[2] = addFormRow(formDinamico, "Sesso (M/F/A)*:");
@@ -339,6 +410,7 @@ public class ArchivioFrame extends JFrame {
                     campiDinamici[5] = null;
                 }
                 case "Artista" -> {
+                	
                     campiDinamici[0] = addFormRow(formDinamico, "Chiave* (A-Z 0-9):");
                     campiDinamici[1] = addFormRow(formDinamico, "Nome*:");
                     campiDinamici[2] = addFormRow(formDinamico, "Sesso (M/F/A)*:");
@@ -347,12 +419,14 @@ public class ArchivioFrame extends JFrame {
                     campiDinamici[5] = addFormRow(formDinamico, "Attività (es. Pittore)*:");
                 }
                 case "Oggetto" -> {
+                	
                     campiDinamici[0] = addFormRow(formDinamico, "Chiave* (A-Z 0-9):");
                     campiDinamici[1] = addFormRow(formDinamico, "Nome oggetto*:");
                     campiDinamici[2] = addFormRow(formDinamico, "Descrizione (opz.):");
                     campiDinamici[3] = campiDinamici[4] = campiDinamici[5] = null;
                 }
                 case "Opera d'Arte" -> {
+                	
                     campiDinamici[0] = addFormRow(formDinamico, "Chiave* (A-Z 0-9):");
                     campiDinamici[1] = addFormRow(formDinamico, "Nome opera*:");
                     campiDinamici[2] = addFormRow(formDinamico, "Artista*:");
@@ -370,19 +444,25 @@ public class ArchivioFrame extends JFrame {
         };
 
         // Aggiorna i campi ogni volta che l'utente cambia tipo soggetto
+        
         comboTipo.addActionListener(e -> aggiornaCampiDinamici.run());
 
         // Carica i campi per il tipo di default (Luogo)
+        
         aggiornaCampiDinamici.run();
 
-        // ── Bottone Aggiungi ────────────────────────────────────────────────
+        //Bottone Aggiungi 
+        
         JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         btnRow.setBackground(BG_PANEL);
         btnRow.setBorder(new EmptyBorder(0, 0, 12, 12));
         btnRow.add(makeBtn("Annulla", BG_CARD, e -> d.dispose()));
         btnRow.add(makeBtn("Aggiungi", ACCENT, e -> {
-            try {
+            
+        	try {
+        		
                 // Costruisce il soggetto leggendo i campiDinamici
+        		
                 Soggetto soggetto = creaSoggettoAvanzato(
                     (String) comboTipo.getSelectedItem(), campiDinamici);
 
@@ -401,16 +481,19 @@ public class ArchivioFrame extends JFrame {
                 aggiornaTabella();
                 d.dispose();
                 mostraInfo("Fotografia aggiunta!");
-            } catch (ArchivioException ex) {
+           
+        	} catch (ArchivioException ex) {
                 mostraErrore(ex.getMessage());
-            } catch (NumberFormatException ex) {
+            
+        	} catch (NumberFormatException ex) {
                 mostraErrore("I campi numerici (altezza, larghezza, anno) devono essere numeri interi.");
-            } catch (Exception ex) {
+            
+        	} catch (Exception ex) {
                 mostraErrore(ex.getMessage());
             }
         }));
 
-        // ── Assembla tutto in un unico pannello scrollabile ─────────────────
+        //Assembla tutto in un unico pannello scrollabile
         JPanel tuttoIlForm = new JPanel(new BorderLayout());
         tuttoIlForm.setBackground(BG_PANEL);
         tuttoIlForm.add(formFisso,    BorderLayout.NORTH);
@@ -427,7 +510,7 @@ public class ArchivioFrame extends JFrame {
     
     
     private Soggetto creaSoggettoAvanzato(String tipo, JTextField[] c) {
-        // c[0] = chiave, c[1..5] = campi specifici per tipo
+        
         return switch (tipo) {
             case "Luogo" ->
                 new Luogo(
@@ -471,31 +554,76 @@ public class ArchivioFrame extends JFrame {
     }
 
     private void rimuoviFoto() {
-        if (archivioSelezionato == null) { mostraAvviso("Seleziona un archivio."); return; }
+    	
+        if (archivioSelezionato == null) { 
+        	
+        	mostraAvviso("Seleziona un archivio."); 
+        	
+        	return; 
+        }
+        
         int row = tabella.getSelectedRow();
-        if (row < 0) { mostraAvviso("Seleziona una fotografia dalla tabella."); return; }
+        
+        if (row < 0) { 
+        	
+        	mostraAvviso("Seleziona una fotografia dalla tabella."); 
+        	return; 
+        }
+        
         String idFoto = tableModel.getValueAt(row, 0).toString();
+        
         int r = JOptionPane.showConfirmDialog(this,
             "Eliminare la fotografia con ID \"" + idFoto + "\"?",
             "Conferma", JOptionPane.YES_NO_OPTION);
+       
         if (r == JOptionPane.YES_OPTION) {
+        	
             try {
+            	
                 gestore.rimuoviFotografia(archivioSelezionato, idFoto);
                 gestore.salvaSuFile();
                 aggiornaTabella();
-            } catch (ArchivioException ex) { mostraErrore(ex.getMessage()); }
+            
+            } catch (ArchivioException ex) { 
+            	
+            	mostraErrore(ex.getMessage()); 
+            	}
         }
     }
 
     private void mostraDettagli() {
-        if (archivioSelezionato == null) { mostraAvviso("Seleziona un archivio."); return; }
+    	
+        if (archivioSelezionato == null) { 
+        	
+        	mostraAvviso("Seleziona un archivio."); 
+        	
+        	return; 
+        }
+        
         int row = tabella.getSelectedRow();
-        if (row < 0) { mostraAvviso("Seleziona una fotografia."); return; }
+        
+        if (row < 0) { 
+        	
+        	mostraAvviso("Seleziona una fotografia."); 
+        	
+        	return; 
+        }
+        
         String idFoto = tableModel.getValueAt(row, 0).toString();
         Archivio a = gestore.getArchivio(archivioSelezionato);
-        if (a == null) return;
+        
+        if (a == null) {
+        	
+        	return;
+        }
+        
         Fotografia f = a.cercaFoto(idFoto);
-        if (f == null) return;
+        
+        if (f == null) {
+        	
+        	return;
+        }
+        
         Responsabile resp = a.getResponsabile();
 
         JTextArea ta = new JTextArea(
@@ -509,6 +637,7 @@ public class ArchivioFrame extends JFrame {
             "Archivio: "   + archivioSelezionato + "\n" +
             "Responsabile: " + (resp != null ? resp.getNome() + " | " + resp.getTelefono() + " | " + resp.getOrarioApertura() : "N/D")
         );
+        
         ta.setEditable(false);
         ta.setBackground(BG_PANEL);
         ta.setForeground(TEXT_MAIN);
@@ -523,9 +652,10 @@ public class ArchivioFrame extends JFrame {
         d.setVisible(true);
     }
 
-    // ── Helpers UI ──────────────────────────────────────────────────────────
+    // Helpers UI
 
     private JTextField addFormRow(JPanel p, String labelText) {
+    	
         p.add(label(labelText));
         JTextField tf = new JTextField();
         styleField(tf);
@@ -534,6 +664,7 @@ public class ArchivioFrame extends JFrame {
     }
 
     private JLabel label(String text) {
+    	
         JLabel l = new JLabel(text);
         l.setForeground(TEXT_SUB);
         l.setFont(FONT_LABEL);
@@ -541,6 +672,7 @@ public class ArchivioFrame extends JFrame {
     }
 
     private JButton makeBtn(String text, Color bg, ActionListener action) {
+    	
         JButton b = new JButton(text);
         b.setFont(FONT_BTN);
         b.setBackground(bg);
@@ -551,14 +683,32 @@ public class ArchivioFrame extends JFrame {
         b.setBorder(new EmptyBorder(8, 14, 8, 14));
         b.setOpaque(true);
         b.addMouseListener(new MouseAdapter() {
-            @Override public void mouseEntered(MouseEvent e) { b.setBackground(bg.brighter()); }
-            @Override public void mouseExited (MouseEvent e) { b.setBackground(bg); }
+        	
+            @Override 
+            
+            public void mouseEntered(MouseEvent e) { 
+            	
+            	b.setBackground(bg.brighter());
+            }
+            
+            @Override 
+            
+            public void mouseExited (MouseEvent e) { 
+            	
+            	b.setBackground(bg); 
+            }
+            
         });
-        if (action != null) b.addActionListener(action);
+        
+        if (action != null) {
+        	
+        	b.addActionListener(action);
+        }
         return b;
     }
 
     private void styleField(JTextField tf) {
+    	
         tf.setBackground(BG_CARD);
         tf.setForeground(TEXT_MAIN);
         tf.setCaretColor(TEXT_MAIN);
@@ -569,12 +719,14 @@ public class ArchivioFrame extends JFrame {
     }
 
     private void styleCombo(JComboBox<?> c) {
+    	
         c.setBackground(BG_CARD);
         c.setForeground(TEXT_MAIN);
         c.setFont(FONT_LABEL);
     }
 
     private void styleList(JList<String> list) {
+    	
         list.setBackground(BG_CARD);
         list.setForeground(TEXT_MAIN);
         list.setFont(FONT_LABEL);
@@ -585,6 +737,7 @@ public class ArchivioFrame extends JFrame {
     }
 
     private void styleTable(JTable t) {
+    	
         t.setBackground(BG_CARD);
         t.setForeground(TEXT_MAIN);
         t.setFont(FONT_LABEL);
@@ -599,7 +752,19 @@ public class ArchivioFrame extends JFrame {
         t.setFillsViewportHeight(true);
     }
 
-    private void mostraErrore(String msg)  { JOptionPane.showMessageDialog(this, msg, "Errore",     JOptionPane.ERROR_MESSAGE);       }
-    private void mostraAvviso(String msg)  { JOptionPane.showMessageDialog(this, msg, "Attenzione", JOptionPane.WARNING_MESSAGE);      }
-    private void mostraInfo(String msg)    { JOptionPane.showMessageDialog(this, msg, "OK",         JOptionPane.INFORMATION_MESSAGE);  }
+    private void mostraErrore(String msg)  { 
+    	
+    	JOptionPane.showMessageDialog(this, msg, "Errore",     JOptionPane.ERROR_MESSAGE);   
+    }
+    
+    private void mostraAvviso(String msg)  { 
+    	
+    	JOptionPane.showMessageDialog(this, msg, "Attenzione", JOptionPane.WARNING_MESSAGE);      
+    }
+    
+    private void mostraInfo(String msg)    { 
+    	
+    	JOptionPane.showMessageDialog(this, msg, "OK",         JOptionPane.INFORMATION_MESSAGE);  
+    	
+    }
 }

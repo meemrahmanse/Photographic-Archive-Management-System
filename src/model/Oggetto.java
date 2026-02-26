@@ -14,7 +14,7 @@ public class Oggetto extends Soggetto {
      * Costruisce Oggetto.
      * @param key chiave univoca (validata in Soggetto)
      * @param nome nome oggetto 
-     * @param descrizione = descrizione opzionale 
+     * @param descrizione, descrizione opzionale (può essere nulla) 
      * @throws IllegalArgumentException se nome è null o vuoto
      */
 

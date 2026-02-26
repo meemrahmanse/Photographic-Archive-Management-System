@@ -1,5 +1,3 @@
-// Archivio.java - meem
-
 package model;
 
 import java.util.Map;
@@ -24,6 +22,7 @@ public class Archivio {
     private Map<String, Fotografia> fotografie;
 
 //costruttore principale
+    
 public Archivio(String nomeArchivio, Responsabile responsabile) {
         
         if (nomeArchivio == null || nomeArchivio.trim().isEmpty()) {
@@ -42,10 +41,12 @@ public Archivio() {
         this.responsabile = null;
         this.fotografie = new HashMap<>();
 }
+
 /**
-    * Aggiunge una fotografia all'archivio.
-    * Se l'ID è già presente, non la inserisce per evitare duplicati.
-*/
+ * Aggiunge una fotografia all'archivio.
+ * @param foto la fotografia da aggiungere
+ * @throws IllegalArgumentException se la foto è nulla, ha ID non valido, o l'ID è già presente
+ */
 
 public void aggiungiFoto(Fotografia foto) {
     
@@ -69,24 +70,31 @@ public void aggiungiFoto(Fotografia foto) {
     fotografie.put(id, foto);
 }
 
-    /**
-     * Rimuove una fotografia dato il suo ID.
-     * @return true se la foto è stata rimossa, false se non trovata.
-     */
+/**
+ * Rimuove una fotografia dato il suo ID.
+ * @param idFoto l'ID della fotografia da rimuovere
+ * @return la fotografia rimossa, oppure null se non trovata
+ */
 
 public Fotografia rimuoviFoto(String idFoto) {
     return fotografie.remove(idFoto);
 }
+
+/**
+ * Sovrascrive una fotografia esistente con i nuovi dati.
+ * @param foto la fotografia aggiornata (deve avere un ID già presente)
+ */
 
 public void aggiornaFoto(Fotografia foto) {
     fotografie.put(foto.getIdFoto(), foto);
 }
 
 
-    /**
-     * Cerca una fotografia per ID.
-     * @return la fotografia trovata oppure null se non esiste.
-     */
+/**
+ * Cerca una fotografia per ID.
+ * @param idFoto l'ID della fotografia da cercare
+ * @return la fotografia trovata, oppure null se non esiste
+ */
 
     public Fotografia cercaFoto(String idFoto) {
         
@@ -120,7 +128,3 @@ public void aggiornaFoto(Fotografia foto) {
         return "Archivio: " + nomeArchivio + " (foto: " + fotografie.size() + ")" + ", Responsabile: " + responsabile;
     }
 }
-
-
-
-// this class represents an archive that contains photographs and is managed by a responsible person

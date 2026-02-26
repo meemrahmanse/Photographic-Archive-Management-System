@@ -7,19 +7,22 @@ package model;
 public class Artista extends Personaggio {
 
     private final AttivitaPrevalente tipoAttivita;
-    private final String attivitaCustom;        //null se non è altro
-    private final String descrizioneAttivita;  //label standard/testo personalizzato
+    private final String attivitaCustom;       // null se l'attività è un valore standard dell'enum
+    private final String descrizioneAttivita;  // label dell'enum oppure testo personalizzato
 
     /**
-     * Costruisce Personaggio
-     * @param key = chiave univoca
-     * @param nome = nome completo
-     * @param sesso = 'M', 'F' o 'A'
-     * @param morte = true se deceduto
-     * @param nascita = anno di nascita
-     * @param attivita = attività prevalente testuale 
-     * @throws IllegalArgumentException se l'attività vuota
+     * Costruisce un Artista con attività prevalente testuale.
+     * Se l'attività non corrisponde a nessun valore dell'enum, viene salvata come testo custom.
+     * @param key      chiave univoca (solo A-Z e 0-9)
+     * @param nome     nome completo
+     * @param sesso    'M', 'F' o 'A'
+     * @param morte    true se deceduto
+     * @param nascita  anno di nascita
+     * @param attivita attività prevalente come testo (es. "Pittore")
+     * @throws IllegalArgumentException se l'attività è nulla o vuota
      */
+    
+    
     public Artista(String key, String nome, char sesso, boolean morte, int nascita, String attivita) {
         
         super(key, nome, sesso, morte, nascita);
@@ -37,6 +40,7 @@ public class Artista extends Personaggio {
             this.descrizioneAttivita = attivitaTrimmed;  
         } 
         else {
+        	
             // Trovato nell'enum → uso la label standard
             this.tipoAttivita = tipo;
             this.attivitaCustom = null;
@@ -44,7 +48,16 @@ public class Artista extends Personaggio {
         }
     }
 
-   // Costruisce un Artista con attività prevalente scelta direttamente dall'enum.
+    /**
+     * Costruisce un Artista con attività prevalente scelta direttamente dall'enum.
+     * @param key     chiave univoca (solo A-Z e 0-9)
+     * @param nome    nome completo
+     * @param sesso   'M', 'F' o 'A'
+     * @param morte   true se deceduto
+     * @param nascita anno di nascita
+     * @param tipo    valore dell'enum AttivitaPrevalente (non può essere ALTRO)
+     * @throws IllegalArgumentException se tipo è ALTRO
+     */ 
     
     public Artista(String key, String nome, char sesso, boolean morte, int nascita, AttivitaPrevalente tipo) {
         
@@ -85,7 +98,10 @@ public class Artista extends Personaggio {
         return attivita.trim();
     }
 
-//getters
+    /**
+     * Restituisce il tipo di attività prevalente come valore dell'enum.
+     * @return il tipo di attività
+     */
     
     public AttivitaPrevalente getTipoAttivita() {
         

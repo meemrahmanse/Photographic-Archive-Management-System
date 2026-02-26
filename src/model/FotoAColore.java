@@ -1,17 +1,15 @@
-// FotoAColore.java - meem
-
 package model;
 
 import java.time.LocalDate;
 
 /**
- * Foto a colori: estende Fotografia aggiungendo il tipo di stampa
- * (es. "chiaro", "opaco").
+ * Rappresenta una fotografia a colori, estende Fotografia aggiungendo
+ * il tipo di stampa. I valori ammessi sono "chiaro" e "opaco".
  */
 
 public class FotoAColore extends Fotografia {
 
-    private String tipoStampa; // "chiaro" o "opaco"
+    private String tipoStampa; // valori ammessi "chiaro" o "opaco"
     
   // costruttore principale che delega al costruttore di Fotografia
     
@@ -22,21 +20,33 @@ public class FotoAColore extends Fotografia {
 
     }
 
-//costruttore vuoto
+    /**
+     * Costruttore vuoto necessario per la deserializzazione da file JSON.
+     * Il tipo di stampa viene inizializzato a "chiaro" come valore di default.
+     */
+    
     public FotoAColore() {
     
     super();
     this.tipoStampa = "chiaro";
     }
 
-
-    // Getter e Setter
+    /**
+     * Restituisce il tipo di stampa della foto.
+     * @return "chiaro" o "opaco"
+     */
+    
     public String getTipoStampa() {
         
         return this.tipoStampa;
     }
 
-
+    /**
+     * Imposta il tipo di stampa della foto.
+     * @param tipoStampa "chiaro" o "opaco" (case-insensitive)
+     * @throws IllegalArgumentException se il valore è nullo, vuoto o non ammesso
+     */
+    
     public void setTipoStampa(String tipoStampa) {
         
           if (tipoStampa == null || tipoStampa.trim().isEmpty()) {
@@ -61,6 +71,3 @@ public class FotoAColore extends Fotografia {
         return super.toString() + ", Tipo di stampa: " + tipoStampa;
     }
 }
-
-
-// this class represents a color photograph with a specific type of print (glossy or matte).

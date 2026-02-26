@@ -8,18 +8,19 @@ import java.util.NoSuchElementException;
 
 /**
  * Catalogo centrale dei soggetti fotografati.
- * Implementa il pattern Singleton = modello generativo che garantisce l'esistenza di un solo oggetto di una classe e consente di accedere all'oggetto da qualsiasi luogo
+ * Implementa il pattern Singleton per garantire un'unica istanza condivisa.
  * Garantisce unicità delle chiavi e accesso globale.
  */
 
 public final class CatalogoSoggetti {
+	
     /** Unica istanza del catalogo */    
     private static final class Holder {
         
         static final CatalogoSoggetti ISTANZA = new CatalogoSoggetti();
     }
 
-public CatalogoSoggetti (){}
+private CatalogoSoggetti (){}
 
     /** Mappa: chiave (maiuscola, trimmed) → Soggetto */  
     private final Map<String, Soggetto> soggetti = new ConcurrentHashMap<>(); 
@@ -30,7 +31,7 @@ public CatalogoSoggetti (){}
     
     public static CatalogoSoggetti getInstance() {
         
-        return Holder.ISTANZA;        //contenitore generico o classe wrapper in grado di memorizzare e gestire un oggetto di qualsiasi tipo
+        return Holder.ISTANZA;        
     }
 
     /**
@@ -56,10 +57,10 @@ public CatalogoSoggetti (){}
 
     /**
      * Cerca un soggetto per chiave 
-     * @param chiave = chiave da cercare 
      * @return Soggetto corrispondente
      * @throws IllegalArgumentException se chiave invalida
-     * @throws NoSuchElementException = non trovato
+     * @param chiave chiave del soggetto da cercare
+	 * @throws NoSuchElementException se il soggetto non viene trovato
      */
     
     public Soggetto trovaPerChiave(String chiave) {
@@ -69,7 +70,7 @@ public CatalogoSoggetti (){}
         
         if (s == null) {
             
-            throw new NoSuchElementException("Errore: il soggetto con la chiave: '" + k + "' non è statotrovato!");
+            throw new NoSuchElementException("Errore: il soggetto con la chiave: '" + k + "' non è stato trovato!");
         }
         return s;
     }
@@ -88,9 +89,8 @@ public CatalogoSoggetti (){}
     }
 
     /**
-     * Restituisce una lista non modificabile di tutti i soggetti.
-     * @return collezione = di sola lettura
-     * Collections = esclusivamente da metodi statici che operano su collezioni o le restituiscono
+     * Restituisce una collezione non modificabile di tutti i soggetti presenti nel catalogo.
+     * @return collezione di sola lettura dei soggetti
      */
     
     public Collection<Soggetto> tuttiSoggetti() {
@@ -106,8 +106,10 @@ public CatalogoSoggetti (){}
     }
 
     /**
-     * Chiave con trim + maiuscolo.
-     * Usata per uniformità.
+     * Normalizza la chiave rimuovendo spazi e convertendo in maiuscolo.
+     * @param chiave la chiave da normalizzare
+     * @return la chiave normalizzata
+     * @throws IllegalArgumentException se la chiave è nulla o vuota
      */
     
     private String normalizzaChiave(String chiave) {
