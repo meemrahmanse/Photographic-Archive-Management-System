@@ -25,6 +25,11 @@ public class GestoreArchivi {
         }
         return instance;
     }
+    
+    public void eliminaArchivio(String nome) {
+        archivi.remove(nome);
+        database.JsonDatabase.salvaArchivi(archivi);
+    }
 
     //this is a method to add an archive to the manager.
     public void aggiungiArchivio(Archivio archivio) {

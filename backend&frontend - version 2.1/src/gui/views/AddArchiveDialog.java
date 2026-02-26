@@ -107,12 +107,28 @@ public class AddArchiveDialog extends JDialog {
             return;
         }
 
-        Responsabile resp = new Responsabile(respNome, respIndirizzo, respTel, respOrari);
-        Archivio archivio = new Archivio(nomeArchivio, resp);
-        GestoreArchivi.getInstance().aggiungiArchivio(archivio);
+        try {
 
-        saved = true;
-        dispose();
+            Responsabile resp = new Responsabile();
+
+            resp.setNome(respNome);
+            resp.setIndirizzo(respIndirizzo);
+            resp.setTelefono(respTel);
+            resp.setOrarioApertura(respOrari);
+
+            Archivio archivio = new Archivio(nomeArchivio, resp);
+            GestoreArchivi.getInstance().aggiungiArchivio(archivio);
+
+            saved = true;
+            dispose();
+
+        } catch (IllegalArgumentException ex) {
+
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Validation Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public boolean isSaved() {
