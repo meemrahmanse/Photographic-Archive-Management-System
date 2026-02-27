@@ -1,5 +1,3 @@
-// Archivio.java - meem
-
 package gestione;
 
 import java.io.Serializable;
@@ -7,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-// this class represents an archive, that has a name, a responsible person, and a list of photographs.
 public class Archivio implements Serializable {
 
     private String nomeArchivio;

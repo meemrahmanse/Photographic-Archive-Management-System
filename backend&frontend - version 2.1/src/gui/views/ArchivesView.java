@@ -79,10 +79,14 @@ public class ArchivesView extends JPanel {
 
         // Table
         String[] columns = { "Archive Name", "Manager Name", "Phone", "Address", "Photos Count" };
+       
         tableModel = new DefaultTableModel(columns, 0) {
+        	
             @Override
+            
             public boolean isCellEditable(int row, int column) {
-                return false;
+               
+            	return false;
             }
         };
 

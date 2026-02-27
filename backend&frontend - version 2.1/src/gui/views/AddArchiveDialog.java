@@ -46,7 +46,7 @@ public class AddArchiveDialog extends JDialog {
         respNomeField = createField(formPanel, "Manager Name:");
         respIndirizzoField = createField(formPanel, "Address:");
         respTelefonoField = createField(formPanel, "Phone:");
-        respOrarioField = createField(formPanel, "Opening Hours:");
+        respOrarioField = createField(formPanel, "Opening Hours (09:00 - 18:00):");
 
         add(formPanel, BorderLayout.CENTER);
 
@@ -55,11 +55,14 @@ public class AddArchiveDialog extends JDialog {
         buttonPanel.setBackground(Theme.CONTENT_BG);
         buttonPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Theme.BORDER_COLOR));
 
+        
         JButton cancelBtn = new JButton("Cancel");
-        cancelBtn.setFont(Theme.FONT_REGULAR);
+        cancelBtn.setFont(Theme.FONT_BOLD);
+        cancelBtn.setBackground(new Color(220, 53, 69));       
+        cancelBtn.setForeground(Color.WHITE);
         cancelBtn.setFocusPainted(false);
         cancelBtn.addActionListener(e -> dispose());
-
+        
         JButton saveBtn = new JButton("Save");
         saveBtn.setFont(Theme.FONT_BOLD);
         saveBtn.setBackground(Theme.ACCENT_COLOR);

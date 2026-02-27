@@ -29,7 +29,7 @@ public class Responsabile implements Serializable {
         
         if (value == null || value.trim().isEmpty()) {
             
-            throw new IllegalArgumentException(field + " non può essere vuoto!");
+            throw new IllegalArgumentException(field + " can't be empty!");
         }
     }
     
@@ -56,11 +56,11 @@ private String normalizeTime(String time) {
         
     } catch (NumberFormatException e) {
     	
-         throw new IllegalArgumentException("Orario contiene caratteri non validi.");
+         throw new IllegalArgumentException("Time contains invalid characters");
     }
 
-    if (h < 0 || h > 23) throw new IllegalArgumentException("Ore non valide (0-23): " + h);
-    if (m < 0 || m > 59) throw new IllegalArgumentException("Minuti non validi (0-59): " + m);
+    if (h < 0 || h > 23) throw new IllegalArgumentException("Invalid hours (0-23): " + h);
+    if (m < 0 || m > 59) throw new IllegalArgumentException("Invalid minutes (0-59): " + m);
 
     return String.format("%02d:%02d", h, m);
 }
@@ -72,14 +72,14 @@ private boolean isValidTelefono(String telefono) {
 private String formatAndValidateOrario(String orario) {
     String[] parts = orario.split("-");
     if (parts.length != 2) {
-        throw new IllegalArgumentException("Formato non valido. Usa il formato: 09:00 - 18:00");
+        throw new IllegalArgumentException("Invalid format. Use the format: 09:00 - 18:00");
     }
 
     String start = normalizeTime(parts[0].trim());
     String end = normalizeTime(parts[1].trim());
 
     if (start.compareTo(end) >= 0) {
-         throw new IllegalArgumentException("L'orario di chiusura deve essere successivo all'apertura.");
+         throw new IllegalArgumentException("Closing time must be after opening time!");
     }
 
     return start + " - " + end;
@@ -92,11 +92,11 @@ private String formatAndValidateOrario(String orario) {
 
 public void setNome(String nome) {
         
-        requireNonEmpty(nome, "Nome: ");
+        requireNonEmpty(nome, "Name: ");
         
         if (!isValidName(nome)) {
             
-            throw new IllegalArgumentException("Il nome può contenere solo lettere e spazi!");
+            throw new IllegalArgumentException("The name can only contain letters and spaces!");
         }
         this.nome = nome;
     }
@@ -109,7 +109,7 @@ public void setNome(String nome) {
 
    public void setIndirizzo(String indirizzo) {
         
-        requireNonEmpty(indirizzo, "Indirizzo: ");
+        requireNonEmpty(indirizzo, "Adress: ");
         this.indirizzo = indirizzo.trim();
     }
 
@@ -121,11 +121,11 @@ public void setNome(String nome) {
 
     public void setTelefono(String telefono) {
         
-        requireNonEmpty(telefono, "Telefono: ");
+        requireNonEmpty(telefono, "Phone: ");
         
         if (!isValidTelefono(telefono)) {
             
-            throw new IllegalArgumentException("Telefono non valido! Ammessi numeri, spazi, +, -.");
+            throw new IllegalArgumentException("Invalid phone number: only numbers allowed!");
         }
         this.telefono = telefono;
     }
@@ -138,13 +138,13 @@ public void setNome(String nome) {
 
     public void setOrarioApertura(String orarioApertura) {
         
-        requireNonEmpty(orarioApertura, "Orario di apertura: ");
+        requireNonEmpty(orarioApertura, "Opening hours: ");
         this.orarioApertura = formatAndValidateOrario(orarioApertura);
     }
     
     @Override // overrides the toString method / stirng representation
     public String toString() {
-        return "Responsabile: " + nome + ", Indirizzo: " + indirizzo + ", Tel: " + telefono + ", Orari: " + orarioApertura;
+        return "Manager: " + nome + ", Address: " + indirizzo + ", Phone: " + telefono + ", Openong hours: " + orarioApertura;
     }
 }
 
