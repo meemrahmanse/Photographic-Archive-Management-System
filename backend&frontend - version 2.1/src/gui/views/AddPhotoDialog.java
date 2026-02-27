@@ -84,7 +84,9 @@ public class AddPhotoDialog extends JDialog {
         buttonPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Theme.BORDER_COLOR));
 
         JButton cancelBtn = new JButton("Cancel");
-        cancelBtn.setFont(Theme.FONT_REGULAR);
+        cancelBtn.setFont(Theme.FONT_BOLD);
+        cancelBtn.setBackground(new Color(220, 53, 69));       
+        cancelBtn.setForeground(Color.WHITE);
         cancelBtn.setFocusPainted(false);
         cancelBtn.addActionListener(e -> dispose());
 
