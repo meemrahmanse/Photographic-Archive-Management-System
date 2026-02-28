@@ -1,0 +1,81 @@
+[
+  {
+    "nomeArchivio": "Bangladesh",
+    "responsabile": {
+      "nome": "Mr. Rahim",
+      "indirizzo": "Dhaka, BD",
+      "telefono": "01258723749",
+      "orarioApertura": "10 to 5 PM"
+    },
+    "fotografie": []
+  },
+  {
+    "nomeArchivio": "hisdfasd",
+    "responsabile": {
+      "nome": "sdfa",
+      "indirizzo": "asdfasd",
+      "telefono": "+95457667578",
+      "orarioApertura": "asdfad"
+    },
+    "fotografie": [
+      {
+        "type": "FotoAColore",
+        "tipoStampa": "Good",
+        "idFoto": "999",
+        "dimensione": "400x400",
+        "statoConservazione": "Good",
+        "soggetto": {
+          "type": "Politico",
+          "partito": "Centro",
+          "carica": "Ministro",
+          "nome": "Luigi Verdi",
+          "sesso": "M",
+          "nascita": 1970,
+          "morte": false,
+          "key": "P2"
+        }
+      },
+      {
+        "type": "FotoAColore",
+        "tipoStampa": "cool",
+        "idFoto": "777",
+        "dimensione": "400x399",
+        "statoConservazione": "good",
+        "soggetto": {
+          "type": "Oggetto",
+          "nome": "Vaso Ming",
+          "descrizione": "Antico vaso cinese",
+          "key": "O1"
+        }
+      }
+    ]
+  },
+  {
+    "nomeArchivio": "Meem Rahman",
+    "responsabile": {
+      "nome": "Shakil",
+      "indirizzo": "1/14 dhaka, 1230",
+      "telefono": "+0098678943",
+      "orarioApertura": "10 to 4 pm"
+    },
+    "fotografie": [
+      {
+        "type": "FotoAColore",
+        "tipoStampa": "Nice",
+        "idFoto": "001",
+        "dimensione": "300x400",
+        "statoConservazione": "Good",
+        "soggetto": {
+          "type": "Politico",
+          "partito": "Centro",
+          "carica": "Ministro",
+          "nome": "Luigi Verdi",
+          "sesso": "M",
+          "nascita": 1970,
+          "morte": false,
+          "key": "P2"
+        }
+      }
+    ]
+  }
+]
